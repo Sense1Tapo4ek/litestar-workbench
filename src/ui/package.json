@@ -1,0 +1,17 @@
+{
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "build:editor": "esbuild static/js/cm-entry.js --bundle --format=esm --outfile=static/js/cm-bundle.js --minify"
+  },
+  "devDependencies": {
+    "@codemirror/commands": "^6.10.2",
+    "@codemirror/lang-python": "^6.2.1",
+    "@codemirror/language": "^6.12.2",
+    "@codemirror/state": "^6.5.4",
+    "@codemirror/view": "^6.39.15",
+    "@lezer/highlight": "^1.2.3",
+    "codemirror": "^6.0.2",
+    "esbuild": "^0.27.3"
+  }
+}

@@ -1,0 +1,37 @@
+description: "Проверяет разделение Write/Read DTO и DTOData.create_instance"
+steps:
+  - name: "Create user"
+    method: POST
+    path: "/users"
+    body:
+      username: "alice"
+      email: "alice@example.com"
+      password: "secret123"
+    expect_status: 201
+    description: "Создаём пользователя — password отсутствует в ответе, role='user' установлен сервером"
+    save_as: user
+
+  - name: "Get user"
+    method: GET
+    path: "/users/${user.id}"
+    expect_status: 200
+    description: "GET по id — ответ содержит id, username, email, role, created_at"
+
+  - name: "Client attempts to set role=admin"
+    method: POST
+    path: "/users"
+    body:
+      username: "bob"
+      email: "bob@example.com"
+      password: "pass1234"
+      role: "admin"
+    expect_status: 201
+    description: "Поле role исключено из UserWriteDTO — клиент не может его установить, сервер ставит role=user"
+
+  - name: "Create user without required fields"
+    method: POST
+    path: "/users"
+    body:
+      username: "charlie"
+    expect_status: 400
+    description: "Поля email и password обязательны в UserWriteDTO — 400"

@@ -1,0 +1,12 @@
+steps:
+  - name: "Request with timing"
+    method: GET
+    path: /
+    expect_status: 200
+    description: "Ответ содержит заголовки X-Process-Time и X-Request-Id"
+
+  - name: "Health (исключён из ProcessTimeMiddleware)"
+    method: GET
+    path: /health
+    expect_status: 200
+    description: "ProcessTimeMiddleware пропускает /health (exclude)"

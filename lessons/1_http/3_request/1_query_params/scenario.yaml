@@ -1,0 +1,30 @@
+steps:
+  - name: "Search with params"
+    method: GET
+    path: "/search?q=litestar&limit=5&page=2"
+    expect_status: 200
+    description: "q, limit, page попадают в ответ с правильными значениями"
+
+  - name: "Search without optionals"
+    method: GET
+    path: "/search?q=python"
+    expect_status: 200
+    description: "limit=10 и page=1 подставляются как дефолтные значения"
+
+  - name: "Invalid limit"
+    method: GET
+    path: "/search?q=test&limit=200"
+    expect_status: 400
+    description: "limit=200 превышает максимум 100 — Litestar возвращает 400"
+
+  - name: "Missing required q"
+    method: GET
+    path: "/search?limit=5"
+    expect_status: 400
+    description: "q обязателен — без него Litestar возвращает 400"
+
+  - name: "Path + query вместе"
+    method: GET
+    path: "/items/42/reviews?sort=oldest&verified_only=true"
+    expect_status: 200
+    description: "item_id из пути, sort и verified_only из query"

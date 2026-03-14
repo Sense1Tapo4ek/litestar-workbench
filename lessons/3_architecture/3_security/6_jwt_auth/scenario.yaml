@@ -1,0 +1,33 @@
+description: "JWTCookieAuth -- JWT аутентификация через cookie"
+steps:
+  - name: "Public endpoint"
+    method: GET
+    path: /public
+    expect_status: 200
+    description: "Не требует аутентификации"
+
+  - name: "Profile without token"
+    method: GET
+    path: /me
+    expect_status: 401
+    description: "Без JWT cookie -- 401"
+
+  - name: "Login Alice"
+    method: POST
+    path: /login
+    body: {"username": "alice", "password": "secret-alice"}
+    expect_status: 201
+    description: "JWT cookie устанавливается автоматически"
+
+  - name: "Profile Alice"
+    method: GET
+    path: /me
+    expect_status: 200
+    description: "Cookie с JWT автоматически передаётся"
+
+  - name: "Login with wrong password"
+    method: POST
+    path: /login
+    body: {"username": "alice", "password": "wrong"}
+    expect_status: 401
+    description: "Неверный пароль -- 401"

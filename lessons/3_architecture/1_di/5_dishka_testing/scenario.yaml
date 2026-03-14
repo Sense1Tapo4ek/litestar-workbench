@@ -1,0 +1,15 @@
+steps:
+  - name: "Get item (cache miss)"
+    method: GET
+    path: /items/foo
+    expect_status: 200
+
+  - name: "Get item again (from cache)"
+    method: GET
+    path: /items/foo
+    expect_status: 200
+
+  - name: "Stats (cache_size=1)"
+    method: GET
+    path: /stats
+    expect_status: 200

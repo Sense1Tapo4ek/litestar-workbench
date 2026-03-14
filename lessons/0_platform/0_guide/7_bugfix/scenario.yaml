@@ -1,0 +1,18 @@
+steps:
+  - name: "Ping"
+    method: GET
+    path: /ping
+    expect_status: 200
+    description: "Базовый эндпоинт работает — сервер запущен корректно"
+
+  - name: "List items"
+    method: GET
+    path: /items
+    expect_status: 200
+    description: "GET /items возвращает список — должен ответить 200"
+
+  - name: "Service health"
+    method: GET
+    path: /health
+    expect_status: 200
+    description: "GET /health возвращает статус — должен ответить 200"

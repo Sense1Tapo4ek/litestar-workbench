@@ -1,0 +1,37 @@
+description: "exclude и exclude_opt_key — публичные эндпоинты без токена"
+steps:
+  - name: "Public endpoint (no token)"
+    method: GET
+    path: /public
+    expect_status: 200
+    description: "Исключён через exclude=[...] — доступен без токена"
+
+  - name: "Status endpoint (no token)"
+    method: GET
+    path: /status
+    expect_status: 200
+    description: "Исключён через exclude_opt_key — доступен без токена"
+
+  - name: "Protected endpoint (no token)"
+    method: GET
+    path: /me
+    expect_status: 401
+    description: "/me требует авторизации — 401 без токена"
+
+  - name: "Login"
+    method: POST
+    path: /login
+    body:
+      username: "alice"
+      password: "any"
+    expect_status: 201
+    description: "Login исключён из auth — работает без токена. JWTAuth.login() возвращает {\"token\": \"<jwt>\"} в теле."
+    save_as: auth
+
+  - name: "Protected endpoint (with token)"
+    method: GET
+    path: /me
+    headers:
+      Authorization: "Bearer ${auth.token}"
+    expect_status: 200
+    description: "С токеном /me доступен"

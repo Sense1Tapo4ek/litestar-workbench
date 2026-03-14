@@ -1,0 +1,33 @@
+description: "Проверяет фильтрацию полей через DataclassDTO"
+steps:
+  - name: "Create user"
+    method: POST
+    path: "/users"
+    body:
+      username: "alice"
+      email: "alice@example.com"
+      password: "secret123"
+    expect_status: 201
+    description: "Создаём пользователя — password отсутствует в ответе, created_at переименован в createdAt"
+    save_as: user
+
+  - name: "Get user"
+    method: GET
+    path: "/users/${user.id}"
+    expect_status: 200
+    description: "GET по id — ответ содержит id, username, email, role, createdAt, но не password"
+
+  - name: "Get nonexistent user"
+    method: GET
+    path: "/users/999"
+    expect_status: 404
+    description: "Несуществующий id — 404 NotFoundException"
+
+  - name: "Create user without email"
+    method: POST
+    path: "/users"
+    body:
+      username: "bob"
+      password: "pass456"
+    expect_status: 400
+    description: "Поле email обязательно — отсутствие возвращает 400"

@@ -1,0 +1,53 @@
+description: "OAuth2PasswordBearerAuth -- OAuth2 password flow"
+steps:
+  - name: "Публичный эндпоинт"
+    method: GET
+    path: /public
+    expect_status: 200
+    description: "Не требует аутентификации"
+
+  - name: "Профиль без токена"
+    method: GET
+    path: /me
+    expect_status: 401
+    description: "Без Authorization header -- 401"
+
+  - name: "Логин Alice (admin)"
+    method: POST
+    path: /login
+    body: {"username": "alice", "password": "secret-alice"}
+    expect_status: 201
+    save_as: auth
+    description: "OAuth2 ответ: access_token + token_type"
+
+  - name: "Профиль Alice"
+    method: GET
+    path: /me
+    headers:
+      authorization: "Bearer ${auth.access_token}"
+    expect_status: 200
+    description: "Bearer токен в Authorization header"
+
+  - name: "Список пользователей (Alice = admin)"
+    method: GET
+    path: /users
+    headers:
+      authorization: "Bearer ${auth.access_token}"
+    expect_status: 200
+    description: "Admin guard пропускает Alice"
+
+  - name: "Логин Bob (viewer)"
+    method: POST
+    path: /login
+    body: {"username": "bob", "password": "secret-bob"}
+    expect_status: 201
+    save_as: auth2
+    description: "Bob -- viewer"
+
+  - name: "Список пользователей (Bob = viewer)"
+    method: GET
+    path: /users
+    headers:
+      authorization: "Bearer ${auth2.access_token}"
+    expect_status: 403
+    description: "Admin guard блокирует Bob -- 403"

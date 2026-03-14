@@ -1,0 +1,19 @@
+description: "pydantic-settings — конфигурация из окружения"
+steps:
+  - name: "Get config"
+    method: GET
+    path: /config
+    expect_status: 200
+    description: "Возвращает конфигурацию приложения (без secret_key)"
+
+  - name: "List items"
+    method: GET
+    path: /items
+    expect_status: 200
+    description: "Список с лимитом из настроек"
+
+  - name: "Health check"
+    method: GET
+    path: /health
+    expect_status: 200
+    description: "Имя приложения из конфига"

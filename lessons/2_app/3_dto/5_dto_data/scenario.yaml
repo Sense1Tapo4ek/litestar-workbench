@@ -1,0 +1,42 @@
+description: "Проверяет DTOData.update_inplace и partial=True для PATCH"
+steps:
+  - name: "Create user"
+    method: POST
+    path: "/users"
+    body:
+      username: "alice"
+      email: "alice@example.com"
+      password: "secret123"
+    expect_status: 201
+    description: "Создаём пользователя для последующего обновления"
+    save_as: user
+
+  - name: "Update email only"
+    method: PATCH
+    path: "/users/${user.id}"
+    body:
+      email: "new-alice@example.com"
+    expect_status: 200
+    description: "PATCH с одним полем — обновляет только email, username остаётся 'alice'"
+
+  - name: "Get user after PATCH"
+    method: GET
+    path: "/users/${user.id}"
+    expect_status: 200
+    description: "Проверяем: email изменился, остальные поля не тронуты"
+
+  - name: "PATCH nonexistent user"
+    method: PATCH
+    path: "/users/999"
+    body:
+      email: "ghost@example.com"
+    expect_status: 404
+    description: "Пользователь не найден — 404 NotFoundException"
+
+  - name: "Update username only"
+    method: PATCH
+    path: "/users/${user.id}"
+    body:
+      username: "alice-updated"
+    expect_status: 200
+    description: "PATCH с одним полем username — email остаётся 'new-alice@example.com', изменился только username"

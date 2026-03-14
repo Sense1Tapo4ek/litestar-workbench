@@ -1,0 +1,42 @@
+steps:
+  - name: "Search by substring"
+    method: GET
+    path: "/products/search?q=a"
+    expect_status: 200
+    description: "\u0412\u043E\u0437\u0432\u0440\u0430\u0449\u0430\u0435\u0442 \u043F\u0440\u043E\u0434\u0443\u043A\u0442\u044B \u0441 'a' \u0432 \u043D\u0430\u0437\u0432\u0430\u043D\u0438\u0438: Laptop, Lamp"
+
+  - name: "Filter by category"
+    method: GET
+    path: "/products/search?q=e&category=electronics"
+    expect_status: 200
+    description: "\u0422\u043E\u043B\u044C\u043A\u043E electronics \u0441 'e' \u0432 name: Laptop, Phone"
+
+  - name: "Limit results"
+    method: GET
+    path: "/products/search?q=a&limit=2"
+    expect_status: 200
+    description: "limit=2 \u2014 \u043D\u0435 \u0431\u043E\u043B\u0435\u0435 2 \u0440\u0435\u0437\u0443\u043B\u044C\u0442\u0430\u0442\u043E\u0432 \u0432 results"
+
+  - name: "Invalid limit"
+    method: GET
+    path: "/products/search?q=a&limit=100"
+    expect_status: 400
+    description: "limit=100 \u043F\u0440\u0435\u0432\u044B\u0448\u0430\u0435\u0442 le=50 \u2014 Litestar \u0432\u043E\u0437\u0432\u0440\u0430\u0449\u0430\u0435\u0442 400"
+
+  - name: "Invalid min_price"
+    method: GET
+    path: "/products/search?q=a&min_price=abc"
+    expect_status: 400
+    description: "min_price=abc \u043D\u0435 \u043F\u0440\u0438\u0432\u043E\u0434\u0438\u0442\u0441\u044F \u043A float \u2014 400"
+
+  - name: "Get product by ID"
+    method: GET
+    path: /products/1
+    expect_status: 200
+    description: "\u0412\u043E\u0437\u0432\u0440\u0430\u0449\u0430\u0435\u0442 \u043F\u0440\u043E\u0434\u0443\u043A\u0442 \u0441 id=1"
+
+  - name: "Product not found"
+    method: GET
+    path: /products/999
+    expect_status: 404
+    description: "\u041D\u0435\u0441\u0443\u0449\u0435\u0441\u0442\u0432\u0443\u044E\u0449\u0438\u0439 id \u2014 404 \u0441 {\"error\": \"not found\"}"

@@ -1,0 +1,7 @@
+description_en: SQLAlchemy plugin, init plugin, repository pattern, DTO and Dishka
+  integration.
+description_ru: "SQLAlchemy plugin, init plugin, repository pattern, \u0438\u043D\u0442\
+  \u0435\u0433\u0440\u0430\u0446\u0438\u044F \u0441 DTO \u0438 Dishka."
+order: 2
+title_en: 'Databases: SQLAlchemy'
+title_ru: 'Databases: SQLAlchemy'

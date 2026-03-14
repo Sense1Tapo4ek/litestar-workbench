@@ -1,0 +1,155 @@
+/* ── Code panel ── */
+.code-tabs {
+  display: flex;
+  background-color: var(--bg-code-tabs);
+  border-bottom: 1px solid var(--border-code);
+  overflow-x: auto;
+  flex-shrink: 0;
+}
+
+.code-tab {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 0 14px;
+  height: var(--panel-header-height);
+  font-family: var(--font-mono);
+  font-size: 12px;
+  color: var(--text-on-dark-dim);
+  cursor: pointer;
+  border-bottom: 2px solid transparent;
+  white-space: nowrap;
+  text-decoration: none;
+  transition: color 0.15s;
+}
+.code-tab:hover { color: var(--text-on-dark); }
+.code-tab.active {
+  color: var(--text-on-dark);
+  border-bottom-color: var(--code-tab-active);
+  background-color: var(--bg-code);
+}
+
+.code-tab-icon { color: var(--code-tab-active); font-size: 11px; }
+
+.code-line-count {
+  margin-left: auto;
+  font-size: 11px;
+  color: var(--code-line-nr);
+  padding-right: 14px;
+  flex-shrink: 0;
+}
+
+.code-body {
+  flex: 1;
+  overflow: auto;
+  background-color: var(--bg-code);
+  position: relative;    /* anchor for line-flash overlay */
+}
+
+/* Pygments output styling */
+.code-body .highlight {
+  font-family: var(--font-mono);
+  font-size: 13px;
+  line-height: 22px;
+  background: transparent;
+}
+
+.code-body .highlight table {
+  border-collapse: collapse;
+  width: 100%;
+}
+
+.code-body .highlight .linenos {
+  color: var(--code-line-nr);
+  padding: 0 12px 0 16px;
+  text-align: right;
+  user-select: none;
+  border-right: 1px solid var(--border-code);
+  width: 52px;
+  vertical-align: top;
+}
+
+.code-body .highlight .code {
+  padding-left: 16px;
+  color: var(--code-text);
+}
+
+.code-body .highlight tr:hover .linenos,
+.code-body .highlight tr:hover .code {
+  background-color: var(--code-line-hover);
+}
+
+/* Pygments token colors — global, applies in code panel AND theory panel */
+.highlight .k,
+.highlight .kn,
+.highlight .kw  { color: var(--code-keyword); }
+.highlight .s,
+.highlight .s1,
+.highlight .s2,
+.highlight .sa,
+.highlight .sb  { color: var(--code-string); }
+.highlight .m,
+.highlight .mi,
+.highlight .mf  { color: var(--code-number); }
+.highlight .nd  { color: var(--code-decorator); }
+.highlight .c,
+.highlight .c1,
+.highlight .cm  { color: var(--code-comment); font-style: italic; }
+.highlight .nf,
+.highlight .n   { color: var(--code-function); }
+.highlight .nn  { color: var(--code-type); }
+.highlight .o   { color: var(--code-operator); }
+.highlight .bp  { color: var(--code-text); }
+
+/* ── Theory panel code blocks (markdown) ── */
+.theory-content pre,
+.theory-content .highlight {
+  background: var(--bg-code);
+  border-radius: var(--radius-sm);
+  margin: 14px 0;
+  overflow: auto;
+}
+
+.theory-content .highlight pre {
+  padding: 14px 16px;
+  margin: 0;
+  font-family: var(--font-mono);
+  font-size: 12.5px;
+  line-height: 1.65;
+  color: var(--code-text);
+  background: transparent;
+}
+
+.theory-content pre > code {
+  display: block;
+  padding: 14px 16px;
+  font-family: var(--font-mono);
+  font-size: 12.5px;
+  line-height: 1.65;
+  color: var(--code-text);
+}
+
+/* Inline code chips in theory */
+.theory-content :not(pre) > code {
+  background: var(--bg-inset);
+  border: 1px solid var(--border);
+  border-radius: 3px;
+  padding: 1px 5px;
+  font-family: var(--font-mono);
+  font-size: 0.85em;
+  color: var(--accent-terracotta);
+}
+
+/* ── Code line flash overlay (absolutely positioned, no HTML mutation) ── */
+.code-line-flash {
+  position: absolute;
+  left: 0;
+  right: 0;
+  height: 22px;                              /* matches code line-height */
+  background-color: rgba(223, 168, 66, 0.2);
+  box-shadow: inset 3px 0 0 var(--accent-mustard);
+  pointer-events: none;
+  z-index: 2;
+  opacity: 1;
+  transition: none;
+}

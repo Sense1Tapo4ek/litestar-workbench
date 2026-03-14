@@ -1,0 +1,16 @@
+{% for lesson in chapter.lessons %}
+{% set is_running = running_lesson is defined and running_lesson and running_lesson[0] == chapter.volume_id and running_lesson[1] == chapter.id and running_lesson[2] == lesson.id %}
+<a class="lesson-row"
+   href="/lessons/{{ chapter.volume_id }}/{{ chapter.id }}/{{ lesson.id }}"
+   data-volume="{{ chapter.volume_id }}"
+   data-chapter="{{ chapter.id }}"
+   data-lesson="{{ lesson.id }}">
+  <span class="status-icon status-locked">○</span>
+  <span class="lesson-num">{{ lesson.order }}</span>
+  <span class="lesson-title"><span class="lang-ru">{{ lesson.title_ru }}</span><span class="lang-en">{{ lesson.title_en }}</span></span>
+  {% if is_running %}
+  <span class="lesson-running-badge">running</span>
+  {% endif %}
+  <span class="lesson-action">Open</span>
+</a>
+{% endfor %}

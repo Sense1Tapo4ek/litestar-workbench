@@ -1,0 +1,12 @@
+steps:
+  - name: "Greeting"
+    method: GET
+    path: /hello
+    expect_status: 200
+    description: "Фиксированное сообщение — одинаковое при каждом запросе"
+
+  - name: "Personal greeting"
+    method: GET
+    path: /greet/Alice
+    expect_status: 200
+    description: "Имя из URL подставляется в поле greeting"

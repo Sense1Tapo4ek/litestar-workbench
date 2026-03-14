@@ -1,0 +1,27 @@
+steps:
+  - name: "Get order list"
+    method: GET
+    path: /orders
+    expect_status: 200
+    description: "Возвращает список заказов -- этот шаг проходит"
+
+  - name: "Create order"
+    method: POST
+    path: /orders
+    body:
+      item: "Book"
+      quantity: 1
+    expect_status: 201
+    description: "Создает заказ и возвращает 201"
+
+  - name: "Get product by ID"
+    method: GET
+    path: /products/42
+    expect_status: 200
+    description: "Возвращает продукт с целочисленным ID"
+
+  - name: "Health check"
+    method: GET
+    path: /health
+    expect_status: 200
+    description: "Возвращает статус ok"

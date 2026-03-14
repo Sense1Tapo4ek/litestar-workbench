@@ -1,0 +1,51 @@
+description: "Guards накапливаются по слоям"
+steps:
+  - name: "No API key -- 401"
+    method: GET
+    path: /api/public
+    expect_status: 401
+    description: "App-level guard отклоняет без x-api-key"
+
+  - name: "Public page with key"
+    method: GET
+    path: /api/public
+    headers:
+      x-api-key: "key-123"
+    expect_status: 200
+    description: "Только app guard -- ключ достаточно"
+
+  - name: "Admin dashboard without role"
+    method: GET
+    path: /api/admin/dashboard
+    headers:
+      x-api-key: "key-123"
+    expect_status: 403
+    description: "App guard ОК, но admin guard отклоняет"
+
+  - name: "Admin dashboard with role"
+    method: GET
+    path: /api/admin/dashboard
+    headers:
+      x-api-key: "key-123"
+      x-role: "admin"
+    expect_status: 200
+    description: "App + admin guards -- оба пройдены"
+
+  - name: "Settings without superadmin"
+    method: GET
+    path: /api/admin/settings
+    headers:
+      x-api-key: "key-123"
+      x-role: "admin"
+    expect_status: 403
+    description: "App + admin OK, но superadmin guard отклоняет"
+
+  - name: "Settings with superadmin"
+    method: GET
+    path: /api/admin/settings
+    headers:
+      x-api-key: "key-123"
+      x-role: "admin"
+      x-level: "10"
+    expect_status: 200
+    description: "Все три guard пройдены"

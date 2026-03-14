@@ -1,0 +1,45 @@
+description: "Аутентификация через Bearer-токен"
+steps:
+  - name: "Public endpoint"
+    method: GET
+    path: /public
+    expect_status: 200
+    description: "Не требует аутентификации"
+
+  - name: "Profile without token"
+    method: GET
+    path: /me
+    expect_status: 401
+    description: "Без Authorization -- 401"
+
+  - name: "Profile Alice"
+    method: GET
+    path: /me
+    headers:
+      authorization: "Bearer token-alice"
+    expect_status: 200
+    description: "Alice -- admin"
+
+  - name: "Profile Bob"
+    method: GET
+    path: /me
+    headers:
+      authorization: "Bearer token-bob"
+    expect_status: 200
+    description: "Bob -- viewer"
+
+  - name: "Admin (Alice -- admin)"
+    method: GET
+    path: /admin
+    headers:
+      authorization: "Bearer token-alice"
+    expect_status: 200
+    description: "Alice = admin -> доступ открыт"
+
+  - name: "Admin (Bob -- viewer)"
+    method: GET
+    path: /admin
+    headers:
+      authorization: "Bearer token-bob"
+    expect_status: 401
+    description: "Bob = viewer -> доступ закрыт"

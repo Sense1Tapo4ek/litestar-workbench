@@ -1,0 +1,58 @@
+steps:
+  - name: "404 — item not found"
+    method: GET
+    path: /items/999
+    expect_status: 404
+    description: "NotFoundException → 404 с detail"
+
+  - name: "Create item"
+    method: POST
+    path: /items
+    body:
+      name: "Чистый код"
+      price: 29.99
+    expect_status: 201
+    save_as: item
+    description: "Корректный запрос — элемент создан"
+
+  - name: "200 — item retrieved"
+    method: GET
+    path: "/items/${item.id}"
+    expect_status: 200
+    description: "GET /items/{id} возвращает созданный элемент"
+
+  - name: "400 — empty name"
+    method: POST
+    path: /items
+    body:
+      name: ""
+      price: 10.0
+    expect_status: 400
+    description: "HTTPException 400 при пустом name"
+
+  - name: "409 — duplicate name"
+    method: POST
+    path: /items
+    body:
+      name: "Чистый код"
+      price: 15.0
+    expect_status: 409
+    description: "HTTPException 409 — такое имя уже есть"
+
+  - name: "401 — unauthorized"
+    method: GET
+    path: /secret
+    expect_status: 401
+    description: "NotAuthorizedException → 401"
+
+  - name: "403 — forbidden"
+    method: GET
+    path: /admin
+    expect_status: 403
+    description: "PermissionDeniedException → 403"
+
+  - name: "400 — custom ValueError handler"
+    method: GET
+    path: /broken
+    expect_status: 400
+    description: "ValueError перехватывается value_error_handler → 400"

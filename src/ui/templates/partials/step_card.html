@@ -1,0 +1,58 @@
+<div class="step-card {% if server_status is defined and server_status.value != 'running' %}step-card-offline{% endif %}"
+     id="step-card-{{ step.id }}">
+  <div class="step-header">
+    <button class="step-run-btn"
+            {% if server_status is defined and server_status.value != 'running' %}disabled{% endif %}
+            hx-post="/api/scenario/{{ chapter.volume_id }}/{{ chapter.id }}/{{ lesson.id }}/{{ step.id }}/execute"
+            hx-target="#step-result-{{ step.id }}"
+            hx-swap="innerHTML">
+      &#9654;
+    </button>
+    {% if step.step_type == 'websocket' %}
+    <span class="badge" style="background:rgba(149,132,201,0.12);color:#9584C9">WS</span>
+    <span class="step-path">{{ step.path }}</span>
+    {% else %}
+    <span class="badge badge-{{ step.method | lower }}">{{ step.method }}</span>
+    <span class="step-path">{{ step.path }}</span>
+    <span class="step-expect">{{ step.expect_status }}</span>
+    {% endif %}
+  </div>
+  {% if step.description %}
+  <div class="step-desc">{{ step.description }}</div>
+  {% endif %}
+  {% if step.body %}
+  <div class="step-body">{{ step.body | tojson(indent=2) }}</div>
+  {% endif %}
+  {% if step.cookies %}
+  <details class="step-headers">
+    <summary class="step-headers-toggle">Cookies</summary>
+    <div class="step-headers-body">
+      {% for key, value in step.cookies.items() %}
+      <div class="step-header-row">
+        <span class="step-header-name">{{ key }}</span>
+        <span class="step-header-value">{{ value }}</span>
+      </div>
+      {% endfor %}
+    </div>
+  </details>
+  {% endif %}
+  {% if step.headers %}
+  <details class="step-headers">
+    <summary class="step-headers-toggle">Headers</summary>
+    <div class="step-headers-body">
+      {% for key, value in step.headers.items() %}
+      <div class="step-header-row">
+        <span class="step-header-name">{{ key }}</span>
+        <span class="step-header-value">{{ value }}</span>
+      </div>
+      {% endfor %}
+    </div>
+  </details>
+  {% endif %}
+  {% if step.messages %}
+  <div class="step-body">
+    {% for msg in step.messages %}{{ msg.send }}{% if not loop.last %}, {% endif %}{% endfor %}
+  </div>
+  {% endif %}
+  <div id="step-result-{{ step.id }}"></div>
+</div>

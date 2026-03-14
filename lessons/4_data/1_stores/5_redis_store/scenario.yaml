@@ -1,0 +1,22 @@
+steps:
+  - name: "Save to KV store"
+    method: POST
+    path: /kv/token
+    body:
+      value: "abc123"
+    expect_status: 201
+
+  - name: "Get from KV store"
+    method: GET
+    path: /kv/token
+    expect_status: 200
+
+  - name: "First request — compute (compute_count=1)"
+    method: GET
+    path: /cached
+    expect_status: 200
+
+  - name: "Second request — from cache (compute_count unchanged)"
+    method: GET
+    path: /cached
+    expect_status: 200

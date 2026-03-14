@@ -1,0 +1,38 @@
+description: "Проверяет обработку ошибок в Orders API: создание, получение, 404, ValueError"
+steps:
+  - name: "Create order"
+    method: POST
+    path: /orders
+    body:
+      item: "Laptop"
+      amount: 999.99
+    expect_status: 201
+    save_as: order
+    description: "Создаёт заказ с положительной суммой, возвращает 201"
+
+  - name: "Get order"
+    method: GET
+    path: "/orders/{order.id}"
+    expect_status: 200
+    description: "Возвращает созданный заказ по ID"
+
+  - name: "Get nonexistent order"
+    method: GET
+    path: /orders/9999
+    expect_status: 404
+    description: "Заказ не найден -- 404"
+
+  - name: "Create order with negative amount"
+    method: POST
+    path: /orders
+    body:
+      item: "Bad item"
+      amount: -5
+    expect_status: 400
+    description: "ValueError перехвачен обработчиком -- 400"
+
+  - name: "Get order with non-numeric ID"
+    method: GET
+    path: /orders/abc
+    expect_status: 404
+    description: "Нечисловой path-параметр -- 404"

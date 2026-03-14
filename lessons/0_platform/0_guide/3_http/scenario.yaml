@@ -1,0 +1,25 @@
+steps:
+  - name: "Custom headers"
+    method: GET
+    path: /headers
+    headers:
+      X-Custom-Header: "hello"
+      Accept-Language: "ru"
+    expect_status: 200
+    description: "Раскрой 'Headers' в карточке — видно что было отправлено. Сервер читает через request.headers."
+
+  - name: "Request cookies"
+    method: GET
+    path: /cookies
+    cookies:
+      session: "abc123"
+      theme: "dark"
+    expect_status: 200
+    description: "Куки передаются в заголовке Cookie. Раскрой 'Cookies' в карточке. Сервер читает через request.cookies."
+
+  - name: "POST echo"
+    method: POST
+    path: /echo
+    body: {"name": "Litestar", "version": 2}
+    expect_status: 201
+    description: "POST с JSON-телом."

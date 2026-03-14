@@ -1,0 +1,25 @@
+steps:
+  - name: "Get user by UUID"
+    method: GET
+    path: /users/550e8400-e29b-41d4-a716-446655440000
+    expect_status: 200
+    description: "Возвращает user_id и тип uuid"
+
+  - name: "Get events by date"
+    method: GET
+    path: /events/2024-01-15
+    expect_status: 200
+    description: "Возвращает дату в ISO и пустой список событий"
+
+  - name: "Ping GET"
+    method: GET
+    path: /ping
+    expect_status: 200
+    description: "Синхронный мульти-метод хендлер отвечает на GET"
+
+  - name: "Ping HEAD"
+    method: HEAD
+    path: /ping
+    expect_status: 200
+    description: "Тот же хендлер отвечает на HEAD без тела"
+

@@ -1,0 +1,88 @@
+{% extends "base.html" %}
+
+{% block title %}S1T Litestar Workbench{% endblock %}
+
+{% block body %}
+<div class="home-topbar home-topbar--minimal">
+  <div class="home-topbar-logo">S1T</div>
+  <div>
+    <div class="home-topbar-name">Litestar Workbench</div>
+  </div>
+  <div class="home-topbar-links">
+    <button class="btn btn-ghost btn-sm theme-toggle" onclick="s1tTheme.toggle()" title="Toggle theme" aria-label="Toggle theme"></button>
+    <button class="btn btn-ghost btn-sm lang-toggle" onclick="s1tLang.toggle()" title="Toggle language" aria-label="Toggle language"></button>
+  </div>
+</div>
+
+<div class="home-grid">
+  {% for volume in volumes %}
+  {% set has_lessons = volume.lesson_count > 0 %}
+  {% if has_lessons %}
+  <a class="volume-card paper"
+     href="/volumes/{{ volume.id }}"
+     data-volume="{{ volume.id }}"
+     id="vol-{{ volume.id }}">
+    <div class="volume-card-eyebrow">{{ '%02d' | format(volume.order) }}</div>
+    <div class="volume-card-title">
+      <span class="lang-ru">{{ volume.title_ru }}</span>
+      <span class="lang-en">{{ volume.title_en }}</span>
+    </div>
+    <div class="volume-card-summary">
+      <span class="lang-ru">{{ volume.summary_ru }}</span>
+      <span class="lang-en">{{ volume.summary_en }}</span>
+    </div>
+    <div class="volume-card-meta">
+      <span class="lang-ru">{{ volume.chapter_count }} {% if volume.chapter_count == 1 %}глава{% elif volume.chapter_count in [2,3,4] %}главы{% else %}глав{% endif %} · {{ volume.lesson_count }} {% if volume.lesson_count == 1 %}урок{% elif volume.lesson_count in [2,3,4] %}урока{% else %}уроков{% endif %}</span>
+      <span class="lang-en">{{ volume.chapter_count }} chapter{% if volume.chapter_count != 1 %}s{% endif %} · {{ volume.lesson_count }} lesson{% if volume.lesson_count != 1 %}s{% endif %}</span>
+    </div>
+    <div class="volume-card-progress">
+      <span class="volume-card-progress-text" data-volume="{{ volume.id }}">0 / {{ volume.lesson_count }}</span>
+      <div class="progress-bar">
+        <div class="progress-fill" style="width: 0%"></div>
+      </div>
+    </div>
+    <div class="volume-lesson-keys" style="display:none">
+      {% for ch in volume.chapters %}{% for l in ch.lessons %}<span data-key="{{ volume.id }}/{{ ch.id }}/{{ l.id }}"></span>{% endfor %}{% endfor %}
+    </div>
+  </a>
+  {% else %}
+  <div class="volume-card volume-card--soon paper"
+       data-volume="{{ volume.id }}"
+       id="vol-{{ volume.id }}">
+    <div class="volume-card-eyebrow">
+      {{ '%02d' | format(volume.order) }}
+      <span class="volume-soon-tag">Soon</span>
+    </div>
+    <div class="volume-card-title">
+      <span class="lang-ru">{{ volume.title_ru }}</span>
+      <span class="lang-en">{{ volume.title_en }}</span>
+    </div>
+  </div>
+  {% endif %}
+  {% else %}
+  <p class="empty-hint">
+    No content found. Add lessons to the <code>lessons/</code> directory.
+  </p>
+  {% endfor %}
+</div>
+
+<script>
+  function initProgress() {
+    const progress = JSON.parse(localStorage.getItem('s1t_progress') || '{}');
+
+    document.querySelectorAll('.volume-card[data-volume]').forEach(card => {
+      const keys = card.querySelectorAll('.volume-lesson-keys [data-key]');
+      if (!keys.length) return;
+      const total = keys.length;
+      const done = [...keys].filter(k => progress[k.dataset.key] === 'completed').length;
+      const fill = card.querySelector('.progress-fill');
+      if (fill) fill.style.width = (total ? (done / total * 100) : 0) + '%';
+      const txt = card.querySelector('.volume-card-progress-text');
+      if (txt) txt.textContent = done + ' / ' + total;
+    });
+  }
+
+  document.addEventListener('DOMContentLoaded', initProgress);
+  document.addEventListener('s1t:langchange', initProgress);
+</script>
+{% endblock %}

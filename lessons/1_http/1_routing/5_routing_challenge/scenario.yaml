@@ -1,0 +1,37 @@
+description: "Проверяет реализацию CRUD-хендлеров для Books API с path-параметрами"
+steps:
+  - name: "Get book list"
+    method: GET
+    path: /books
+    expect_status: 200
+    description: "Возвращает список из 3 предзаполненных книг"
+
+  - name: "Get book by ID"
+    method: GET
+    path: /books/1
+    expect_status: 200
+    description: "Возвращает книгу Clean Code с id=1"
+
+  - name: "Get book chapter"
+    method: GET
+    path: /books/1/chapters/3
+    expect_status: 200
+    description: "Возвращает dict с book_id и chapter"
+
+  - name: "Get nonexistent book"
+    method: GET
+    path: /books/9999
+    expect_status: 404
+    description: "Книга с id=9999 не существует -- 404"
+
+  - name: "Delete book"
+    method: DELETE
+    path: /books/2
+    expect_status: 204
+    description: "Удаляет книгу Refactoring, возвращает 204"
+
+  - name: "Confirm book deletion"
+    method: GET
+    path: /books/2
+    expect_status: 404
+    description: "Книга с id=2 удалена -- 404"

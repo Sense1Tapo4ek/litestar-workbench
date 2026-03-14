@@ -1,0 +1,20 @@
+steps:
+  - name: "Request 1 — within limit"
+    method: GET
+    path: /limited
+    expect_status: 200
+
+  - name: "Request 2 — within limit"
+    method: GET
+    path: /limited
+    expect_status: 200
+
+  - name: "Request 3 — limit exceeded (2/min) -> 429"
+    method: GET
+    path: /limited
+    expect_status: 429
+
+  - name: "Excluded endpoint — no limit"
+    method: GET
+    path: /unlimited
+    expect_status: 200

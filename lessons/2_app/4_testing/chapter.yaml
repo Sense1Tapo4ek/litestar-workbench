@@ -1,0 +1,5 @@
+order: 4
+title_en: Testing Basics
+title_ru: "Основы тестирования"
+description_en: "TestClient and AsyncTestClient: testing Litestar apps without running a server."
+description_ru: "TestClient и AsyncTestClient: тестирование Litestar-приложений без запуска сервера."

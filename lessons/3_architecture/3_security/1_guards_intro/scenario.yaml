@@ -1,0 +1,31 @@
+description: "Проверка guard-функций"
+steps:
+  - name: "Public endpoint (no key)"
+    method: GET
+    path: /public
+    expect_status: 200
+    description: "Доступен всем -- без guard"
+
+  - name: "Protected endpoint without key"
+    method: GET
+    path: /protected
+    expect_status: 401
+    description: "Без заголовка x-api-key -- 401"
+
+  - name: "Protected endpoint with key"
+    method: GET
+    path: /protected
+    expect_status: 200
+    headers:
+      x-api-key: "secret-key-123"
+    description: "С правильным ключом -- 200"
+
+  - name: "Create with key"
+    method: POST
+    path: /protected/items
+    headers:
+      x-api-key: "secret-key-123"
+    body:
+      name: "Secret Item"
+    expect_status: 201
+    description: "POST с валидным API key"

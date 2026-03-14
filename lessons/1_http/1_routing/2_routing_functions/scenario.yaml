@@ -1,0 +1,45 @@
+steps:
+  - name: "Empty list"
+    method: GET
+    path: /items
+    expect_status: 200
+    description: "Возвращает [] — хранилище пусто"
+
+  - name: "Create item"
+    method: POST
+    path: /items
+    body:
+      name: "Clean Code"
+      price: 29.99
+    expect_status: 201
+    description: "Возвращает созданный Item с id"
+    save_as: item
+
+  - name: "Get by ID"
+    method: GET
+    path: "/items/${item.id}"
+    expect_status: 200
+    description: "Возвращает Item с совпадающим id"
+
+  - name: "Update (PATCH)"
+    method: PATCH
+    path: "/items/${item.id}"
+    body:
+      name: "Clean Code (2nd Ed)"
+      price: 34.99
+    expect_status: 200
+    description: "Обновляет поля и возвращает обновлённый Item"
+
+  - name: "Delete"
+    method: DELETE
+    path: "/items/${item.id}"
+    expect_status: 204
+    description: "Удаляет Item, возвращает пустой ответ"
+
+  - name: "Confirm deletion"
+    method: GET
+    path: "/items/${item.id}"
+    expect_status: 404
+    description: "После удаления GET возвращает 404"
+
+

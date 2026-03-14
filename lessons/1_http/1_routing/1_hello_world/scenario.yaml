@@ -1,0 +1,12 @@
+steps:
+  - name: "Root route"
+    method: GET
+    path: /
+    expect_status: 200
+    description: "Возвращает приветственное сообщение"
+
+  - name: "Health check"
+    method: GET
+    path: /health
+    expect_status: 200
+    description: "Возвращает {\"status\": \"ok\"}"

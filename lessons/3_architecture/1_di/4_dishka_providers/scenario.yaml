@@ -1,0 +1,11 @@
+steps:
+  - name: "SESSION scope: accumulation in one connection"
+    type: websocket
+    path: /ws
+    messages:
+      - send: "hello"
+        expect_contains: "msg#1:hello"
+      - send: "world"
+        expect_contains: "msg#2:world"
+      - send: "!"
+        expect_contains: "msg#3:!"

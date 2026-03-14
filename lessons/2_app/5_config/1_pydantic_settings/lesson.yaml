@@ -1,0 +1,4 @@
+mode: tutorial
+order: 1
+title_en: "Configuration with pydantic-settings"
+title_ru: "Конфигурация через pydantic-settings"

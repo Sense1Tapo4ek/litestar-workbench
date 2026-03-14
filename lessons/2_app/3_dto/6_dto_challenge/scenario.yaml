@@ -1,0 +1,39 @@
+description: "CRUD с разделением write/read DTO"
+steps:
+  - name: "Create product"
+    method: POST
+    path: /products
+    body:
+      name: "Widget"
+      price: 9.99
+      category: "tools"
+      internal_cost: 5.0
+    expect_status: 201
+    description: "internal_cost отсутствует в ответе (ReadDTO скрывает)"
+    save_as: product
+
+  - name: "Get product"
+    method: GET
+    path: /products/${product.id}
+    expect_status: 200
+    description: "internal_cost отсутствует в ответе"
+
+  - name: "List products"
+    method: GET
+    path: /products
+    expect_status: 200
+    description: "Список без internal_cost"
+
+  - name: "Patch price"
+    method: PATCH
+    path: /products/${product.id}
+    body:
+      price: 12.99
+    expect_status: 200
+    description: "Обновляет только price"
+
+  - name: "Get nonexistent"
+    method: GET
+    path: /products/999
+    expect_status: 404
+    description: "NotFoundException для несуществующего продукта"

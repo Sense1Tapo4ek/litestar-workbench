@@ -1,0 +1,19 @@
+description: "BackgroundTask и BackgroundTasks — задачи после ответа"
+steps:
+  - name: "Notify user"
+    method: POST
+    path: /notify/42
+    expect_status: 202
+    description: "Возвращает 202, запускает bg задачу"
+
+  - name: "Process user"
+    method: POST
+    path: /process/42
+    expect_status: 202
+    description: "Возвращает 202, запускает 2 bg задачи"
+
+  - name: "Check audit log"
+    method: GET
+    path: /audit-log
+    expect_status: 200
+    description: "Все bg задачи записали в audit_log"

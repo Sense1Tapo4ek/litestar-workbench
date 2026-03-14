@@ -1,0 +1,25 @@
+description: "DTO bugfix — три бага в конфигурации"
+steps:
+  - name: "Create item"
+    method: POST
+    path: /items
+    body:
+      name: "Widget"
+      price: 9.99
+    expect_status: 201
+    description: "Bug 3: dto/return_dto перепутаны — сначала исправь, потом пройдёт"
+    save_as: item
+
+  - name: "Patch price only"
+    method: PATCH
+    path: /items/${item.id}
+    body:
+      price: 14.99
+    expect_status: 200
+    description: "Bug 2: без partial=True PATCH требует все поля"
+
+  - name: "Get item — no owner_id in response"
+    method: GET
+    path: /items/${item.id}
+    expect_status: 200
+    description: "Bug 1: owner_id должен быть скрыт в ответе"

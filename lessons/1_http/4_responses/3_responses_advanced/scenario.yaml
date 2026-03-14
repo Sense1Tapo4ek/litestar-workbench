@@ -1,0 +1,13 @@
+description: "Проверяет потоковый ответ и скачивание файла"
+steps:
+  - name: "Get stream"
+    method: GET
+    path: /stream
+    expect_status: 200
+    description: "Возвращает 5 чанков через Stream"
+
+  - name: "Download file"
+    method: GET
+    path: /download
+    expect_status: 200
+    description: "Возвращает файл с Content-Disposition: attachment"

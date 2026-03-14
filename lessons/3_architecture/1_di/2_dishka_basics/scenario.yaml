@@ -1,0 +1,15 @@
+steps:
+  - name: "Ping (no dishka)"
+    method: GET
+    path: /ping
+    expect_status: 200
+
+  - name: "Config via dishka (Scope.APP)"
+    method: GET
+    path: /config
+    expect_status: 200
+
+  - name: "GreetService (auto-wired от AppConfig)"
+    method: GET
+    path: /hello
+    expect_status: 200

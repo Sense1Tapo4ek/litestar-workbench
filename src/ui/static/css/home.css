@@ -1,0 +1,403 @@
+/* ── Home topbar — bookshelf ── */
+.home-topbar {
+  display: flex;
+  align-items: center;
+  padding: 0 32px;
+  height: var(--topbar-height);
+  gap: 14px;
+  background-color: var(--bg-elevated);
+  border-bottom: 1px solid var(--border);
+  box-shadow: 0 2px 8px rgba(60, 50, 40, 0.04);
+}
+
+.home-topbar-logo {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 32px;
+  height: 32px;
+  background-color: var(--bg-code);
+  border-radius: 2px;
+  font-family: var(--font-mono);
+  font-size: 11px;
+  font-weight: 600;
+  color: var(--text-on-dark);
+  letter-spacing: -0.5px;
+  flex-shrink: 0;
+}
+
+.home-topbar-name {
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--text-primary);
+}
+
+.home-topbar-links {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-left: auto;
+}
+
+.home-schema-link {
+  font-size: 12px;
+  color: var(--text-tertiary);
+  text-decoration: none;
+}
+.home-schema-link:hover { color: var(--accent-blue); text-decoration: underline; }
+
+.server-link-sep {
+  display: inline-block;
+  width: 1px;
+  height: 12px;
+  background: var(--border);
+  flex-shrink: 0;
+}
+
+.progress-bar {
+  width: 80px;
+  height: 3px;
+  background-color: var(--bg-inset);
+  border-radius: 2px;
+  overflow: hidden;
+}
+
+.progress-fill {
+  height: 100%;
+  background-color: var(--accent-sage);
+  border-radius: 2px;
+  transition: width 0.3s ease;
+}
+
+/* ── Chapter cards (volume.html) ── */
+.chapter-card {
+  background-color: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: 2px;
+  margin-bottom: 1px;
+  overflow: hidden;
+}
+
+.chapter-header {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 14px 20px;
+  cursor: pointer;
+  user-select: none;
+  transition: background-color 0.12s;
+}
+.chapter-header:hover { background-color: var(--bg-hover); }
+
+.chapter-title {
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--text-primary);
+  flex: 1;
+}
+
+.chapter-count {
+  font-size: 11px;
+  color: var(--text-muted);
+  font-family: var(--font-mono);
+}
+
+.chapter-chevron {
+  font-size: 9px;
+  color: var(--text-muted);
+  transition: transform 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+  display: inline-block;
+}
+.chapter-card.open .chapter-chevron { transform: rotate(90deg); }
+
+.chapter-body {
+  border-top: 1px solid var(--border-light);
+  overflow: hidden;
+  height: 0;
+  transition: height 0.26s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* ── Lesson rows (lesson_list.html, used in volume.html) ── */
+.lesson-row {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 10px 20px;
+  border-top: 1px solid var(--border-light);
+  text-decoration: none;
+  color: inherit;
+  transition: background-color 0.1s;
+  cursor: pointer;
+}
+.lesson-row:first-child { border-top: none; }
+.lesson-row:hover:not(.locked) { background-color: var(--bg-hover); }
+.lesson-row.locked { opacity: 0.4; cursor: not-allowed; }
+
+.lesson-num {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  color: var(--text-muted);
+  width: 24px;
+  text-align: right;
+  flex-shrink: 0;
+}
+
+.lesson-title {
+  font-size: 13px;
+  color: var(--text-primary);
+  flex: 1;
+}
+.lesson-row.active .lesson-title { color: #9B7B2D; font-weight: 500; }
+
+.lesson-action {
+  font-size: 11px;
+  color: var(--text-muted);
+}
+.lesson-row.active .lesson-action {
+  color: var(--accent-mustard);
+  background-color: var(--accent-mustard-bg);
+  padding: 2px 7px;
+  border-radius: 2px;
+}
+.lesson-row.completed .lesson-action { color: var(--accent-sage); }
+
+.lesson-running-badge {
+  font-size: 11px;
+  font-weight: 500;
+  color: var(--accent-sage);
+  background-color: var(--accent-sage-bg-strong);
+  padding: 2px 7px;
+  border-radius: 2px;
+  white-space: nowrap;
+}
+
+/* ── Home page — Volume card grid ── */
+.home-grid {
+  max-width: 960px;
+  margin: 0 auto;
+  padding: 48px 32px 80px;
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 28px;
+}
+
+.volume-card {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  padding: 32px 28px;
+  text-decoration: none;
+  color: inherit;
+  transition: box-shadow 0.25s ease, transform 0.25s ease;
+  cursor: pointer;
+}
+
+a.volume-card:hover {
+  box-shadow: var(--shadow-paper-hover);
+  transform: translateY(-2px);
+}
+
+.volume-card--soon {
+  opacity: 0.35;
+  pointer-events: none;
+}
+
+.volume-soon-tag {
+  font-size: 9px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  color: var(--text-muted);
+  border: 1px solid var(--border);
+  padding: 1px 5px;
+  border-radius: 2px;
+}
+
+.volume-card-eyebrow {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 11px;
+  font-weight: 600;
+  color: var(--text-muted);
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+}
+
+.volume-card-title {
+  font-size: 18px;
+  font-weight: 700;
+  color: var(--text-primary);
+  letter-spacing: -0.02em;
+  line-height: 1.25;
+}
+
+.volume-card-summary {
+  font-size: 12px;
+  color: var(--text-secondary);
+  line-height: 1.45;
+}
+
+.volume-card-meta {
+  font-size: 12px;
+  color: var(--text-tertiary);
+  margin-top: auto;
+}
+
+.volume-card-progress {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding-top: 8px;
+  border-top: 1px solid var(--border-light);
+}
+
+.volume-card-progress-text {
+  font-size: 11px;
+  color: var(--text-muted);
+  font-family: var(--font-mono);
+  white-space: nowrap;
+  min-width: 40px;
+}
+
+.volume-card .progress-bar {
+  flex: 1;
+}
+
+/* ── Volume detail page ── */
+.volume-page-content {
+  display: grid;
+  grid-template-columns: 360px 1fr;
+  height: calc(100vh - var(--topbar-height));
+}
+
+/* Left: A4 document sheet */
+.volume-info-panel {
+  overflow-y: auto;
+  min-height: 0;
+  display: flex;
+  align-items: flex-start;
+  justify-content: center;
+  padding: 40px 28px;
+}
+
+.volume-sheet {
+  width: 100%;
+  max-width: 300px;
+  padding: 36px 28px;
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+  aspect-ratio: 3 / 4;
+}
+
+.volume-sheet-eyebrow {
+  font-size: 11px;
+  font-weight: 600;
+  color: var(--text-muted);
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  margin-bottom: 14px;
+}
+
+.volume-sheet-title {
+  font-size: 20px;
+  font-weight: 700;
+  color: var(--text-primary);
+  letter-spacing: -0.03em;
+  line-height: 1.2;
+  margin: 0 0 16px;
+}
+
+.volume-sheet-desc {
+  font-size: 13px;
+  color: var(--text-secondary);
+  line-height: 1.7;
+  margin: 0;
+  flex: 1;
+}
+
+.volume-sheet-divider {
+  height: 1px;
+  background: var(--border-light);
+  margin: 20px 0;
+}
+
+.volume-sheet-stats {
+  font-size: 11px;
+  color: var(--text-muted);
+  margin-bottom: 12px;
+}
+
+.volume-sheet-progress {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 20px;
+}
+
+.volume-sheet-progress-text {
+  font-size: 11px;
+  color: var(--text-muted);
+  font-family: var(--font-mono);
+  white-space: nowrap;
+  min-width: 40px;
+}
+
+.volume-sheet-progress .progress-bar {
+  flex: 1;
+}
+
+.volume-sheet-continue {
+  width: 100%;
+  background-color: transparent;
+  color: var(--accent-sage);
+  border: 1px solid var(--accent-sage);
+}
+.volume-sheet-continue:hover {
+  background-color: var(--accent-sage-bg);
+}
+.volume-sheet-continue:disabled {
+  border-color: var(--border);
+  color: var(--text-muted);
+}
+
+/* Right: scrollable lesson tree */
+.volume-lessons-panel {
+  overflow-y: auto;
+  min-height: 0;
+  display: flex;
+  flex-direction: column;
+  border-left: 1px solid var(--border-light);
+}
+
+.volume-chapter-list {
+  display: flex;
+  flex-direction: column;
+  padding: 28px 28px 48px;
+  gap: 8px;
+}
+
+.volume-chapter-list .chapter-card {
+  border-radius: var(--radius-sm);
+  margin-bottom: 0;
+}
+
+/* Chapter descriptions (between header and body) */
+.chapter-desc {
+  font-size: 12px;
+  color: var(--text-tertiary);
+  padding: 0 20px 12px 20px;
+  line-height: 1.5;
+}
+
+/* Breadcrumb volume link */
+.bc-volume {
+  font-size: 13px;
+  color: var(--text-tertiary);
+  text-decoration: none;
+}
+.bc-volume:hover {
+  color: var(--accent-sage);
+  text-decoration: underline;
+}

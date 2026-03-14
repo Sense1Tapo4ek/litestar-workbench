@@ -1,0 +1,44 @@
+<div class="ws-panel">
+  <div class="ws-url-row">
+    <span class="ws-label" id="ws-host-label">ws://…:{{ lesson.port }}</span>
+    <input class="ws-path-input" id="ws-path-input" type="text"
+           value="{{ first_ws.path if first_ws is defined and first_ws else '/ws' }}"
+           placeholder="/ws">
+    <button class="btn btn-primary btn-sm" id="ws-connect-btn"
+            onclick="window.s1tWS.toggle()"
+            data-i18n="ws_connect">Подключить</button>
+  </div>
+  <div class="ws-messages" id="ws-messages">
+    <div class="ws-empty" data-i18n="ws_not_connected">Не подключено</div>
+  </div>
+  {% if first_ws is defined and first_ws and first_ws.messages %}
+  <div class="ws-actions">
+    {% for msg in first_ws.messages %}
+    <div class="ws-action-item">
+      <span class="ws-action-text">{{ msg.send }}</span>
+      <button class="btn btn-ghost btn-sm"
+              data-msg="{{ msg.send | e }}"
+              onclick="window.s1tWS.sendText(this.dataset.msg)"
+              data-i18n="ws_send">Отправить</button>
+    </div>
+    {% endfor %}
+    <div class="ws-send-row ws-send-custom">
+      <input class="ws-send-input" id="ws-send-input" type="text"
+             placeholder="custom message"
+             onkeydown="if(event.key==='Enter') window.s1tWS.send()">
+      <button class="btn btn-primary btn-sm"
+              onclick="window.s1tWS.send()"
+              data-i18n="ws_send">Отправить</button>
+    </div>
+  </div>
+  {% else %}
+  <div class="ws-send-row">
+    <input class="ws-send-input" id="ws-send-input" type="text"
+           placeholder='{"text": "hello"}'
+           onkeydown="if(event.key==='Enter') window.s1tWS.send()">
+    <button class="btn btn-primary btn-sm"
+            onclick="window.s1tWS.send()"
+            data-i18n="ws_send">Отправить</button>
+  </div>
+  {% endif %}
+</div>

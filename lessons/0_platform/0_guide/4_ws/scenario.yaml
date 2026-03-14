@@ -1,0 +1,11 @@
+steps:
+  - name: "ws events"
+    type: websocket
+    path: /ws
+    messages:
+      - send: '{"event": "ping"}'
+        expect_contains: "pong"
+      - send: '{"event": "greet", "name": "world"}'
+        expect_contains: "Hello"
+      - send: '{"event": "time"}'
+        expect_contains: "time"

@@ -1,0 +1,31 @@
+steps:
+  - name: "List items"
+    method: GET
+    path: /api/items/
+    expect_status: 200
+    description: "GET /api/items/ — маршрут через вложенный Router"
+
+  - name: "Create item"
+    method: POST
+    path: /api/items/
+    body:
+      name: "Книга"
+      price: 19.99
+    expect_status: 201
+    description: "POST /api/items/ создаёт элемент"
+    save_as: item
+
+  - name: "List users"
+    method: GET
+    path: /api/users/
+    expect_status: 200
+    description: "GET /api/users/ — другой Router под тем же /api префиксом"
+
+  - name: "Create user"
+    method: POST
+    path: /api/users/
+    body:
+      name: "Alice"
+      email: "alice@example.com"
+    expect_status: 201
+    description: "POST /api/users/ создаёт пользователя"

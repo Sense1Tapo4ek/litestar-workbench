@@ -1,0 +1,4 @@
+mode: challenge
+order: 6
+title_en: "DTO: Implement CRUD with Write/Read Split"
+title_ru: "DTO: реализуй CRUD с разделением write/read"

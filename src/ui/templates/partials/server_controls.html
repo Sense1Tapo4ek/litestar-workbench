@@ -1,0 +1,36 @@
+<div class="server-status-row" data-status="{{ server_status.value }}">
+  <div class="server-dot {{ server_status.value }}"></div>
+  <span class="server-addr">
+    {% if lesson %}:{{ lesson.port }}{% endif %}
+    <span class="server-status-text">{{ server_status.value }}</span>
+  </span>
+  {% if server_status.value == 'running' or server_status.value == 'stopping' %}
+  <button class="btn btn-danger btn-sm ml-auto"
+          hx-post="/api/server/{{ volume_id }}/{{ chapter_id }}/{{ lesson_id }}/stop"
+          hx-target="#server-controls"
+          hx-swap="innerHTML"
+          data-i18n="btn_stop">
+    Стоп
+  </button>
+  {% elif server_status.value == 'conflict' %}
+  <button class="btn btn-primary btn-sm ml-auto" disabled data-i18n="btn_start">Запустить</button>
+  {% else %}
+  <button class="btn btn-primary btn-sm ml-auto"
+          hx-post="/api/server/{{ volume_id }}/{{ chapter_id }}/{{ lesson_id }}/start"
+          hx-target="#server-controls"
+          hx-swap="innerHTML"
+          data-i18n="{{ 'btn_starting' if server_status.value == 'starting' else 'btn_start' }}"
+          {% if server_status.value == 'starting' %}disabled{% endif %}>
+    {% if server_status.value == 'starting' %}Запуск...{% else %}Запустить{% endif %}
+  </button>
+  {% endif %}
+</div>
+{% if server_status.value == 'conflict' %}
+<div class="server-conflict-msg">
+  {% if conflict_with %}
+    <a href="/lessons/{{ conflict_with[0] }}/{{ conflict_with[1] }}/{{ conflict_with[2] }}">{{ conflict_with[2] }}</a> <span data-i18n="server_is_running">запущен</span>
+  {% else %}
+    <span data-i18n="another_server">Другой сервер запущен</span>
+  {% endif %}
+</div>
+{% endif %}

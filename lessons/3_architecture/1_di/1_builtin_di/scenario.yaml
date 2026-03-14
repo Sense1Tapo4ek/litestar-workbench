@@ -1,0 +1,20 @@
+steps:
+  - name: "Simple dependency"
+    method: GET
+    path: /url
+    expect_status: 200
+
+  - name: "Dependency chain (db_info depends on db_url)"
+    method: GET
+    path: /chain
+    expect_status: 200
+
+  - name: "Generator dep with cleanup"
+    method: GET
+    path: /connection
+    expect_status: 200
+
+  - name: "skip_validation — string instead of int"
+    method: GET
+    path: /skip
+    expect_status: 200

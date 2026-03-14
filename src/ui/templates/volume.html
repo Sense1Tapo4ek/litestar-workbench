@@ -1,0 +1,223 @@
+{% extends "base.html" %}
+
+{% block title %}{{ volume.title_ru }} / {{ volume.title_en }} — S1T Litestar Workbench{% endblock %}
+
+{% block body %}
+<div class="home-topbar">
+  <a class="home-topbar-logo" href="/" style="text-decoration:none">S1T</a>
+  <div>
+    <div class="home-topbar-name">
+      <span class="lang-ru">{{ volume.title_ru }}</span>
+      <span class="lang-en">{{ volume.title_en }}</span>
+    </div>
+  </div>
+  <div class="home-topbar-links">
+    <a class="home-schema-link" href="/" data-i18n="back_home">&larr; <span class="lang-ru">На главную</span><span class="lang-en">Home</span></a>
+    <span class="server-link-sep"></span>
+    <button class="btn btn-ghost btn-sm" onclick="resetProgress()" data-i18n="reset_progress">Сбросить прогресс</button>
+    <button class="btn btn-ghost btn-sm" id="admin-toggle" onclick="toggleAdmin()">Admin: Выкл</button>
+    <span class="server-link-sep"></span>
+    <button class="btn btn-ghost btn-sm theme-toggle" onclick="s1tTheme.toggle()" title="Toggle theme" aria-label="Toggle theme"></button>
+    <button class="btn btn-ghost btn-sm lang-toggle" onclick="s1tLang.toggle()" title="Toggle language" aria-label="Toggle language"></button>
+  </div>
+</div>
+
+<div class="volume-page-content">
+
+  <!-- Left: A4 document sheet -->
+  <div class="volume-info-panel">
+    <div class="volume-sheet paper">
+      <div class="volume-sheet-eyebrow">{{ '%02d' | format(volume.order) }}</div>
+      <h1 class="volume-sheet-title">
+        <span class="lang-ru">{{ volume.title_ru }}</span>
+        <span class="lang-en">{{ volume.title_en }}</span>
+      </h1>
+      <p class="volume-sheet-desc">
+        <span class="lang-ru">{{ volume.description_ru }}</span>
+        <span class="lang-en">{{ volume.description_en }}</span>
+      </p>
+
+      <div class="volume-sheet-divider"></div>
+
+      <div class="volume-sheet-stats">
+        <span class="lang-ru">{{ volume.chapter_count }} {% if volume.chapter_count == 1 %}глава{% elif volume.chapter_count in [2,3,4] %}главы{% else %}глав{% endif %} · {{ volume.lesson_count }} {% if volume.lesson_count == 1 %}урок{% elif volume.lesson_count in [2,3,4] %}урока{% else %}уроков{% endif %}</span>
+        <span class="lang-en">{{ volume.chapter_count }} chapter{% if volume.chapter_count != 1 %}s{% endif %} · {{ volume.lesson_count }} lesson{% if volume.lesson_count != 1 %}s{% endif %}</span>
+      </div>
+
+      <div class="volume-sheet-progress">
+        <span class="volume-sheet-progress-text">0 / {{ volume.lesson_count }}</span>
+        <div class="progress-bar">
+          <div class="progress-fill" style="width: 0%"></div>
+        </div>
+      </div>
+
+      <button class="btn btn-primary volume-sheet-continue" id="continue-btn" onclick="goToContinue()" disabled>
+        <span data-i18n="continue_btn"><span class="lang-ru">Продолжить</span><span class="lang-en">Continue</span></span> &rarr;
+      </button>
+    </div>
+  </div>
+
+  <!-- Right: scrollable lesson tree -->
+  <div class="volume-lessons-panel">
+    <div class="volume-chapter-list">
+      {% for chapter in volume.chapters %}
+      <div class="chapter-card open" id="chapter-{{ chapter.id }}">
+        <div class="chapter-header" onclick="toggleChapter('{{ chapter.id }}')">
+          <span class="chapter-title">{{ loop.index }}. <span class="lang-ru">{{ chapter.title_ru }}</span><span class="lang-en">{{ chapter.title_en }}</span></span>
+          <span class="chapter-count">{{ chapter.lessons|length }}</span>
+          <div class="progress-bar" style="width: 44px;">
+            <div class="progress-fill" style="width: 0%"></div>
+          </div>
+          <span class="chapter-chevron">&#9654;</span>
+        </div>
+        {% if chapter.description_ru or chapter.description_en %}
+        <div class="chapter-desc">
+          <span class="lang-ru">{{ chapter.description_ru }}</span>
+          <span class="lang-en">{{ chapter.description_en }}</span>
+        </div>
+        {% endif %}
+        <div class="chapter-body" id="chapter-{{ chapter.id }}-body">
+          {% include "partials/lesson_list.html" %}
+        </div>
+      </div>
+      {% endfor %}
+    </div>
+
+    {# Hidden keys for progress calc #}
+    <div id="volume-lesson-keys" style="display:none">
+      {% for ch in volume.chapters %}{% for l in ch.lessons %}<span data-key="{{ volume.id }}/{{ ch.id }}/{{ l.id }}"></span>{% endfor %}{% endfor %}
+    </div>
+  </div>
+</div>
+
+<script>
+  const VOLUME_ID = '{{ volume.id }}';
+
+  function toggleChapter(id) {
+    const card = document.getElementById('chapter-' + id);
+    const body = document.getElementById('chapter-' + id + '-body');
+    const isOpen = card.classList.contains('open');
+    if (isOpen) {
+      body.style.height = body.scrollHeight + 'px';
+      requestAnimationFrame(() => {
+        requestAnimationFrame(() => { body.style.height = '0'; });
+      });
+      card.classList.remove('open');
+    } else {
+      card.classList.add('open');
+      body.style.height = body.scrollHeight + 'px';
+      body.addEventListener('transitionend', () => {
+        if (card.classList.contains('open')) body.style.height = 'auto';
+      }, { once: true });
+    }
+  }
+
+  function goToContinue() {
+    const btn = document.getElementById('continue-btn');
+    if (btn.dataset.href) window.location.href = btn.dataset.href;
+  }
+
+  function toggleAdmin() {
+    if (localStorage.getItem('s1t_admin') === 'on') {
+      localStorage.removeItem('s1t_admin');
+    } else {
+      localStorage.setItem('s1t_admin', 'on');
+    }
+    syncAdminButton();
+    initProgress();
+  }
+
+  function syncAdminButton() {
+    const btn = document.getElementById('admin-toggle');
+    if (!btn) return;
+    const on = localStorage.getItem('s1t_admin') === 'on';
+    btn.textContent = on ? s1tLang.t('admin_on') : s1tLang.t('admin_off');
+    btn.className = on ? 'btn btn-primary btn-sm' : 'btn btn-ghost btn-sm';
+  }
+
+  function resetProgress() {
+    localStorage.removeItem('s1t_progress');
+    initProgress();
+  }
+
+  function initProgress() {
+    const adminMode = localStorage.getItem('s1t_admin') === 'on';
+    const progress  = JSON.parse(localStorage.getItem('s1t_progress') || '{}');
+    const rows = document.querySelectorAll('.lesson-row[data-volume]');
+
+    const keys = document.querySelectorAll('#volume-lesson-keys [data-key]');
+    const total = keys.length;
+    const done  = [...keys].filter(k => progress[k.dataset.key] === 'completed').length;
+
+    const pText = document.querySelector('.volume-sheet-progress-text');
+    if (pText) pText.textContent = `${done} / ${total}`;
+    const pFill = document.querySelector('.volume-sheet-progress .progress-fill');
+    if (pFill) pFill.style.width = `${total ? (done / total * 100) : 0}%`;
+
+    let firstActive = null;
+    let foundActive = false;
+
+    rows.forEach(row => {
+      const key = `${row.dataset.volume}/${row.dataset.chapter}/${row.dataset.lesson}`;
+      const completed = progress[key] === 'completed';
+      const icon   = row.querySelector('.status-icon');
+      const action = row.querySelector('.lesson-action');
+
+      row.classList.remove('completed', 'active', 'locked');
+      if (completed) {
+        row.classList.add('completed');
+        icon.className = 'status-icon status-completed'; icon.textContent = '✓';
+        action.textContent = s1tLang.t('lesson_done');
+      } else if (adminMode) {
+        row.classList.add('active');
+        icon.className = 'status-icon status-active'; icon.textContent = '▶';
+        action.textContent = s1tLang.t('lesson_open');
+        if (!firstActive) firstActive = row.getAttribute('href');
+      } else if (!foundActive) {
+        foundActive = true;
+        row.classList.add('active');
+        icon.className = 'status-icon status-active'; icon.textContent = '▶';
+        action.textContent = s1tLang.t('lesson_continue');
+        firstActive = row.getAttribute('href');
+      } else {
+        row.classList.add('locked');
+        icon.className = 'status-icon status-locked'; icon.textContent = '○';
+        action.textContent = '';
+      }
+    });
+
+    document.querySelectorAll('.chapter-card').forEach(card => {
+      const chRows = card.querySelectorAll('.lesson-row[data-volume]');
+      const chDone = [...chRows].filter(r => {
+        const k = `${r.dataset.volume}/${r.dataset.chapter}/${r.dataset.lesson}`;
+        return progress[k] === 'completed';
+      }).length;
+      const fill = card.querySelector('.progress-fill');
+      if (fill && chRows.length) fill.style.width = `${(chDone / chRows.length * 100)}%`;
+    });
+
+    const btn = document.getElementById('continue-btn');
+    if (done === total && total > 0) {
+      btn.disabled = true;
+    } else if (firstActive) {
+      btn.disabled = false;
+      btn.dataset.href = firstActive;
+    } else {
+      btn.disabled = true;
+    }
+  }
+
+  document.addEventListener('DOMContentLoaded', () => {
+    document.querySelectorAll('.chapter-card.open .chapter-body').forEach(body => {
+      body.style.height = 'auto';
+    });
+    syncAdminButton();
+    initProgress();
+  });
+
+  document.addEventListener('s1t:langchange', () => {
+    syncAdminButton();
+    initProgress();
+  });
+</script>
+{% endblock %}

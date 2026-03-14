@@ -1,0 +1,18 @@
+steps:
+  - name: "Platform info"
+    method: GET
+    path: /
+    expect_status: 200
+    description: "Возвращает PlatformInfo — typed dataclass, не голый dict"
+
+  - name: "Technology stack"
+    method: GET
+    path: /stack
+    expect_status: 200
+    description: "Компоненты платформы"
+
+  - name: "List chapters"
+    method: GET
+    path: /courses
+    expect_status: 200
+    description: "Главы курса"

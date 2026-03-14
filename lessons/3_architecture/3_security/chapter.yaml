@@ -1,0 +1,5 @@
+description_en: Guards (access control) + Security Backends (SessionAuth, JWT, OAuth2).
+description_ru: Guards (access control) + Security Backends (SessionAuth, JWT, OAuth2).
+order: 3
+title_en: Security & Auth
+title_ru: Security & Auth

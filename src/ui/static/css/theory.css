@@ -1,0 +1,94 @@
+/* ── Theory panel typography ── */
+.theory-content h1 {
+  font-size: 20px;
+  font-weight: 700;
+  color: var(--text-primary);
+  margin: 0 0 14px;
+}
+
+.theory-content h2 {
+  font-size: 16px;
+  font-weight: 600;
+  color: var(--text-primary);
+  border-bottom: 1px solid var(--border);
+  padding-bottom: 6px;
+  margin: 22px 0 10px;
+}
+
+.theory-content h3 {
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--text-primary);
+  margin: 18px 0 8px;
+}
+
+.theory-content p {
+  font-size: 14px;
+  color: #5A5D5C;
+  line-height: 1.7;
+  margin-bottom: 14px;
+}
+
+.theory-content code {
+  font-family: var(--font-mono);
+  font-size: 12px;
+  color: var(--accent-terracotta);
+  background-color: var(--bg-inset);
+  padding: 2px 6px;
+  border-radius: 4px;
+}
+
+.theory-content pre {
+  background-color: var(--bg-code);
+  border-radius: var(--radius-md);
+  padding: 14px 16px;
+  margin-bottom: 16px;
+  overflow-x: auto;
+}
+
+.theory-content pre code {
+  font-family: var(--font-mono);
+  font-size: 13px;
+  color: var(--code-text);
+  background: none;
+  padding: 0;
+}
+
+.theory-content table {
+  border-collapse: collapse;
+  width: 100%;
+  margin-bottom: 16px;
+  font-size: 13px;
+}
+
+.theory-content th {
+  background-color: var(--bg-inset);
+  text-align: left;
+  padding: 8px 12px;
+  border: 1px solid var(--border);
+  font-weight: 600;
+}
+
+.theory-content td {
+  padding: 8px 12px;
+  border: 1px solid var(--border);
+}
+
+.theory-content blockquote {
+  border-left: 3px solid var(--accent-sage);
+  background-color: var(--accent-sage-bg);
+  padding: 10px 16px;
+  margin-bottom: 14px;
+  border-radius: 0 var(--radius-sm) var(--radius-sm) 0;
+  font-style: italic;
+}
+
+.theory-content ul, .theory-content ol {
+  padding-left: 20px;
+  margin-bottom: 14px;
+  font-size: 14px;
+  color: #5A5D5C;
+  line-height: 1.7;
+}
+
+.theory-content li { margin-bottom: 4px; }

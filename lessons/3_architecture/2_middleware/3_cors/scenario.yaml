@@ -1,0 +1,17 @@
+steps:
+  - name: "Public data"
+    method: GET
+    path: /api/public
+    expect_status: 200
+
+  - name: "Private data"
+    method: GET
+    path: /api/private
+    expect_status: 200
+
+  - name: "Create item (POST)"
+    method: POST
+    path: /api/items
+    body:
+      name: "Test Item"
+    expect_status: 201

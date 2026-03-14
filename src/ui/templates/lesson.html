@@ -1,0 +1,535 @@
+{% extends "base.html" %}
+
+{% block title %}{{ lesson.title_ru }} / {{ lesson.title_en }} — S1T Litestar Workbench{% endblock %}
+
+{% block head %}{% endblock %}
+
+{% block body %}
+<div class="app-layout">
+  <!-- Top bar (no server controls here) -->
+  <header class="topbar">
+    <div class="topbar-left">
+      <a class="topbar-logo" href="/">S1T</a>
+      <div class="divider-vert"></div>
+      {% if prev_lesson %}
+      <a class="btn btn-ghost btn-sm"
+         href="/lessons/{{ prev_lesson[0].id }}/{{ prev_lesson[1].id }}/{{ prev_lesson[2].id }}">
+        &#9665; <span class="lang-ru">{{ prev_lesson[2].title_ru }}</span><span class="lang-en">{{ prev_lesson[2].title_en }}</span>
+      </a>
+      {% endif %}
+    </div>
+
+    <div class="topbar-center">
+      <a class="bc-volume" href="/volumes/{{ volume_id }}"><span class="lang-ru">{{ volume.title_ru }}</span><span class="lang-en">{{ volume.title_en }}</span></a>
+      <span class="bc-sep">/</span>
+      <span class="bc-chapter"><span class="lang-ru">{{ chapter.title_ru }}</span><span class="lang-en">{{ chapter.title_en }}</span></span>
+      <span class="bc-sep">/</span>
+      <span class="bc-lesson"><span class="lang-ru">{{ lesson.title_ru }}</span><span class="lang-en">{{ lesson.title_en }}</span></span>
+      <span id="lesson-status-dot" class="lesson-status-dot"></span>
+    </div>
+
+    <div class="topbar-right">
+      <button class="btn btn-ghost btn-sm theme-toggle" onclick="s1tTheme.toggle()" title="Toggle theme" aria-label="Toggle theme"></button>
+      <button class="btn btn-ghost btn-sm lang-toggle" onclick="s1tLang.toggle()" title="Toggle language" aria-label="Toggle language"></button>
+      <span id="admin-badge" class="mode-badge mode-badge-admin" style="display:none;">Admin</span>
+      {% if next_lesson %}
+      <a id="next-lesson-link"
+         class="btn btn-ghost btn-sm btn-locked"
+         href="/lessons/{{ next_lesson[0].id }}/{{ next_lesson[1].id }}/{{ next_lesson[2].id }}">
+        <span class="lang-ru">{{ next_lesson[2].title_ru }}</span><span class="lang-en">{{ next_lesson[2].title_en }}</span> &#9655;
+      </a>
+      {% endif %}
+    </div>
+  </header>
+
+  <!-- Workspace -->
+  <div class="workspace" id="workspace">
+    <!-- Theory panel -->
+    <aside class="panel panel-theory" id="panel-theory">
+      <div class="panel-header">
+        <span data-i18n="theory">Теория</span>
+        <span class="panel-header-meta">lesson.md</span>
+      </div>
+      <div class="panel-content theory-content">
+        {% if theory_html_en %}
+          <div class="lang-ru">{{ theory_html | safe if theory_html else '' }}</div>
+          <div class="lang-en">{{ theory_html_en | safe }}</div>
+        {% elif theory_html %}
+          {{ theory_html | safe }}
+        {% else %}
+          <p class="empty-hint" data-i18n="no_theory">Нет теории для этого урока.</p>
+        {% endif %}
+      </div>
+    </aside>
+
+    <div class="resize-handle resize-handle-col" id="rh-1"></div>
+
+    <!-- Code panel -->
+    <main class="panel panel-code" id="panel-code">
+      <div class="code-tabs" id="code-tabs">
+        {% for fname in raw_files %}
+        <a class="code-tab {% if loop.first %}active{% endif %}"
+           data-filename="{{ fname }}"
+           href="#">
+          <span class="code-tab-icon">&#11205;</span>
+          {{ fname }}
+          <span class="modified-dot" {% if file_modified_map.get(fname) %}style="display:inline-block"{% endif %}></span>
+        </a>
+        {% endfor %}
+      </div>
+      <div class="code-toolbar">
+        <button class="btn btn-primary btn-sm" onclick="window.s1tEditor.save()" data-i18n="save">Сохранить</button>
+        <button class="btn btn-ghost btn-sm" id="btn-reset"
+                onclick="window.s1tEditor.reset()"
+                data-i18n="reset"
+                style="visibility: {% if has_modifications %}visible{% else %}hidden{% endif %}">
+          Сбросить
+        </button>
+        <span class="save-indicator" id="save-indicator"></span>
+        {% if lesson.mode.value != 'tutorial' %}
+        <span class="mode-badge mode-badge-{{ lesson.mode.value }}">{{ lesson.mode.value }}</span>
+        {% endif %}
+      </div>
+      <div id="cm-editor">
+        {% if not raw_files %}
+          <div class="code-empty" data-i18n="no_code">Файлы кода не найдены.</div>
+        {% endif %}
+      </div>
+    </main>
+
+    <div class="resize-handle resize-handle-col" id="rh-2"></div>
+
+    <!-- Right panel: server controls + links + scenario + logs -->
+    <aside class="panel panel-test" id="panel-test">
+      <div class="test-wrapper">
+
+        <!-- Server mini-panel -->
+        <div class="server-panel">
+          <!-- HTMX swap target: status row + start/stop button -->
+          <div id="server-controls">
+            {% include "partials/server_controls.html" %}
+          </div>
+          <!-- Static links: not replaced by HTMX -->
+          <div class="server-links">
+            {% if scenario and scenario.links %}
+              {% for link in scenario.links %}
+              <a class="server-link"
+                 href="{% if link.url.startswith('http') %}{{ link.url }}{% else %}http://localhost:{{ lesson.port }}{{ link.url }}{% endif %}"
+                 target="_blank">{{ link.name }}</a>
+              {% endfor %}
+              <span class="server-link-sep"></span>
+            {% endif %}
+            <a class="server-link server-link-ext" href="http://localhost:{{ lesson.port }}/schema" target="_blank">ReDoc</a>
+            <a class="server-link server-link-ext" href="http://localhost:{{ lesson.port }}/schema/swagger" target="_blank">Swagger UI</a>
+            <a class="server-link server-link-ext" href="http://localhost:{{ lesson.port }}/schema/elements" target="_blank">Elements</a>
+            <a class="server-link server-link-ext" href="http://localhost:{{ lesson.port }}/schema/rapidoc" target="_blank">RapiDoc</a>
+            <a class="server-link server-link-ext" href="https://docs.litestar.dev" target="_blank">Litestar Docs</a>
+            <span class="server-link-sep"></span>
+            <a class="server-link server-link-admin" href="http://localhost:5540" target="_blank">RedisInsight</a>
+            <a class="server-link server-link-admin" href="http://localhost:5050" target="_blank">pgAdmin</a>
+            <a class="server-link server-link-admin" href="http://localhost:15672" target="_blank">RabbitMQ</a>
+          </div>
+        </div>
+
+        <!-- Scenario steps -->
+        <div class="test-top">
+          {% set has_ws = scenario and scenario.steps | selectattr('step_type', 'equalto', 'websocket') | list | length > 0 %}
+          {% set ws_steps = (scenario.steps | selectattr('step_type', 'equalto', 'websocket') | list) if scenario else [] %}
+          {% set other_steps = (scenario.steps | rejectattr('step_type', 'equalto', 'websocket') | list) if scenario else [] %}
+
+          <div id="test-panel-http" style="display:flex;flex-direction:column;flex:1;overflow:hidden;">
+            <div class="panel-header">
+              <span data-i18n="scenario">Сценарий</span>
+              {% if scenario and other_steps %}
+              <span class="panel-header-meta">
+                <span class="lang-en">{{ other_steps|length }} step{% if other_steps|length != 1 %}s{% endif %}</span>
+                <span class="lang-ru">{{ other_steps|length }} {% if other_steps|length == 1 %}шаг{% elif other_steps|length in [2,3,4] %}шага{% else %}шагов{% endif %}</span>
+              </span>
+              {% endif %}
+              <button class="btn-done ml-auto"
+                      id="done-btn"
+                      onclick="onDoneClick()">
+              </button>
+            </div>
+            <div class="test-content" id="scenario-steps">
+              {% if scenario %}
+                {% for step in other_steps %}
+                {% include "partials/step_card.html" %}
+                {% endfor %}
+                {% if ws_steps %}
+                  {% set first_ws = ws_steps | first %}
+                  {% if other_steps %}
+                  <div class="ws-section">
+                    <div class="ws-section-header">WebSockets</div>
+                    {% for step in ws_steps %}
+                    {% include "partials/step_card.html" %}
+                    {% endfor %}
+                    {% include "partials/ws_panel.html" %}
+                  </div>
+                  {% else %}
+                  {% include "partials/ws_panel.html" %}
+                  {% endif %}
+                {% endif %}
+              {% else %}
+                <p class="empty-hint" style="padding: 40px 20px;" data-i18n="no_scenario">Нет сценария для этого урока.</p>
+              {% endif %}
+            </div>
+          </div>
+        </div>
+
+        <div class="resize-handle resize-handle-row" id="rh-3"></div>
+
+        <!-- Logs -->
+        <div class="test-bottom" id="panel-logs">
+          <div class="panel-header">
+            <span data-i18n="server_logs">Логи сервера</span>
+            <button class="btn btn-ghost btn-sm ml-auto"
+                    onclick="document.getElementById('log-entries').innerHTML=''"
+                    data-i18n="clear">
+              Очистить
+            </button>
+          </div>
+          <div class="logs-content">
+            <div id="log-entries"
+                 hx-ext="sse"
+                 sse-connect="/api/server/{{ volume_id }}/{{ chapter_id }}/{{ lesson_id }}/logs"
+                 sse-swap="log"
+                 hx-swap="beforeend scroll:#log-entries:bottom">
+              <div class="logs-empty" data-i18n="logs_empty">Запустите сервер для просмотра логов</div>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </aside>
+  </div>
+</div>
+
+
+<!-- Lesson complete overlay -->
+<div id="success-overlay" class="success-overlay" style="display:none;" role="dialog" aria-modal="true">
+  <div class="success-overlay-card">
+    <div class="success-overlay-icon">&#10003;</div>
+    <div class="success-overlay-title" data-i18n="lesson_complete">Урок пройден</div>
+    {% if next_lesson %}
+    <div class="success-overlay-subtitle"><span class="lang-ru">{{ next_lesson[2].title_ru }}</span><span class="lang-en">{{ next_lesson[2].title_en }}</span></div>
+    <div class="success-overlay-actions">
+      <button class="btn btn-ghost btn-sm" onclick="document.getElementById('success-overlay').style.display='none'" data-i18n="overlay_continue">Продолжить</button>
+      <button class="btn btn-primary" onclick="goNextLesson('/lessons/{{ next_lesson[0].id }}/{{ next_lesson[1].id }}/{{ next_lesson[2].id }}')"><span class="lang-ru">{{ next_lesson[2].title_ru }}</span><span class="lang-en">{{ next_lesson[2].title_en }}</span> &#9655;</button>
+    </div>
+    {% else %}
+    <div class="success-overlay-actions">
+      <button class="btn btn-primary" onclick="document.getElementById('success-overlay').style.display='none'" data-i18n="overlay_close">Закрыть</button>
+    </div>
+    {% endif %}
+  </div>
+</div>
+
+<!-- Lesson files as JSON for CodeMirror -->
+<script type="application/json" id="lesson-files-data">{{ raw_files | tojson }}</script>
+
+{% set has_ws = scenario and scenario.steps | selectattr('step_type', 'equalto', 'websocket') | list | length > 0 %}
+{% if has_ws %}
+<script src="/static/js/websocket.js"></script>
+<script>
+  window.addEventListener('DOMContentLoaded', function() {
+    if (window.s1tWS) window.s1tWS.init({{ lesson.port }});
+  });
+</script>
+{% endif %}
+
+<!-- CodeMirror 6 editor -->
+<script type="module">
+  import { initEditor } from '/static/js/editor.js';
+  const filesData = JSON.parse(document.getElementById('lesson-files-data').textContent);
+  const fileNames = Object.keys(filesData);
+  if (fileNames.length > 0) {
+    initEditor('cm-editor', filesData, fileNames[0],
+      '{{ volume_id }}', '{{ chapter_id }}', '{{ lesson_id }}');
+  }
+</script>
+
+<script>
+  // ── Success overlay: backdrop click ──────────────────────────────────────
+  (function() {
+    const overlay = document.getElementById('success-overlay');
+    if (!overlay) return;
+    overlay.addEventListener('click', function(e) {
+      if (e.target === overlay) overlay.style.display = 'none';
+    });
+  })();
+
+  async function goNextLesson(url) {
+    try {
+      await fetch('/api/server/{{ volume_id }}/{{ chapter_id }}/{{ lesson_id }}/stop', { method: 'POST' });
+    } catch(_) {}
+    window.location.href = url;
+  }
+
+  // ── Logs: remove placeholder on first SSE message ──────────────────────────
+  document.body.addEventListener('htmx:sseMessage', function() {
+    const empty = document.querySelector('#log-entries .logs-empty');
+    if (empty) empty.remove();
+  });
+
+  // ── Step cards: sync disabled state with server status ─────────────────────
+  function syncStepCards() {
+    const row = document.querySelector('#server-controls [data-status]');
+    const running = row && row.dataset.status === 'running';
+    document.querySelectorAll('#scenario-steps .step-run-btn').forEach(btn => {
+      btn.disabled = !running;
+    });
+    document.querySelectorAll('#scenario-steps .step-card').forEach(card => {
+      card.classList.toggle('step-card-offline', !running);
+    });
+    const wsBtn = document.getElementById('ws-connect-btn');
+    if (wsBtn) wsBtn.disabled = !running;
+    if (!running && window.s1tWS) window.s1tWS.disconnect();
+  }
+  syncStepCards();
+
+  // ── Server status change: sync cards + manage logs ─────────────────────────
+  document.getElementById('server-controls').addEventListener('htmx:afterSwap', function() {
+    syncStepCards();
+    const row = document.querySelector('#server-controls [data-status]');
+    const status = row ? row.dataset.status : '';
+    const logEntries = document.getElementById('log-entries');
+    if (status === 'stopped' || status === 'stopping') {
+      logEntries.innerHTML = '<div class="logs-empty" data-i18n="logs_empty">' + s1tLang.t('logs_empty') + '</div>';
+    } else if (status === 'starting') {
+      logEntries.innerHTML = '<div class="logs-empty" data-i18n="logs_starting">' + s1tLang.t('logs_starting') + '</div>';
+    }
+  });
+
+  // ── code: link interception (code:filename or code:filename#L9) ───────────
+  document.addEventListener('click', function(e) {
+    const link = e.target.closest('a[href^="code:"]');
+    if (!link) return;
+    e.preventDefault();
+    const m = link.getAttribute('href').match(/^code:([^#]+)(?:#L(\d+))?$/);
+    if (!m) return;
+    const filename = m[1];
+    if (window.s1tEditor) window.s1tEditor.switchFile(filename);
+  });
+
+  // ── Panel resizing (VS Code style) ─────────────────────────────────────────
+  (function() {
+    const STORE_KEY = 's1t_panel_sizes';
+    const MIN_COL   = 160;   // px — minimum column panel width
+    const MIN_ROW   = 60;    // px — minimum log panel height
+    const MIN_TOP   = 80;    // px — minimum scenario panel height
+
+    function saveSizes() {
+      localStorage.setItem(STORE_KEY, JSON.stringify({
+        theory: document.getElementById('panel-theory').style.flexBasis,
+        code:   document.getElementById('panel-code').style.flexBasis,
+        logH:   document.getElementById('panel-logs').style.flexBasis,
+      }));
+    }
+
+    function loadSizes() {
+      try {
+        const d = JSON.parse(localStorage.getItem(STORE_KEY) || 'null');
+        if (!d) return;
+        if (d.theory) document.getElementById('panel-theory').style.flexBasis = d.theory;
+        if (d.code)   document.getElementById('panel-code').style.flexBasis   = d.code;
+        if (d.logH)   document.getElementById('panel-logs').style.flexBasis   = d.logH;
+      } catch(_) {}
+    }
+
+    function startDrag(e, onMove, onDone) {
+      e.preventDefault();
+      document.body.style.userSelect = 'none';
+      function up() {
+        document.body.style.userSelect = '';
+        document.body.style.cursor = '';
+        document.removeEventListener('mousemove', onMove);
+        document.removeEventListener('mouseup', up);
+        onDone();
+      }
+      document.addEventListener('mousemove', onMove);
+      document.addEventListener('mouseup', up);
+    }
+
+    // ── Column handle between two explicit-width panels ──────────────────────
+    function colDragger(handle, leftEl, rightEl) {
+      handle.addEventListener('mousedown', function(e) {
+        const startX     = e.clientX;
+        const startLeft  = leftEl.offsetWidth;
+        const startRight = rightEl.offsetWidth;
+        handle.classList.add('dragging');
+        document.body.style.cursor = 'col-resize';
+        startDrag(e,
+          function(e) {
+            const dx = e.clientX - startX;
+            let L = startLeft  + dx;
+            let R = startRight - dx;
+            if (L < MIN_COL) { L = MIN_COL; R = startLeft + startRight - MIN_COL; }
+            if (R < MIN_COL) { R = MIN_COL; L = startLeft + startRight - MIN_COL; }
+            leftEl.style.flexBasis  = L + 'px';
+            rightEl.style.flexBasis = R + 'px';
+          },
+          function() { handle.classList.remove('dragging'); saveSizes(); }
+        );
+      });
+    }
+
+    // ── Column handle where right panel is flex:1 (fills rest) ───────────────
+    function colDraggerRight(handle, leftEl) {
+      handle.addEventListener('mousedown', function(e) {
+        const startX    = e.clientX;
+        const startLeft = leftEl.offsetWidth;
+        handle.classList.add('dragging');
+        document.body.style.cursor = 'col-resize';
+        startDrag(e,
+          function(e) {
+            const dx = e.clientX - startX;
+            leftEl.style.flexBasis = Math.max(MIN_COL, startLeft + dx) + 'px';
+          },
+          function() { handle.classList.remove('dragging'); saveSizes(); }
+        );
+      });
+    }
+
+    // ── Row handle (logs panel height) ───────────────────────────────────────
+    function rowDragger(handle, topEl, bottomEl) {
+      handle.addEventListener('mousedown', function(e) {
+        const startY      = e.clientY;
+        const startTop    = topEl.offsetHeight;
+        const startBottom = bottomEl.offsetHeight;
+        const totalH      = startTop + startBottom;
+        handle.classList.add('dragging');
+        document.body.style.cursor = 'row-resize';
+        startDrag(e,
+          function(e) {
+            const dy    = e.clientY - startY;
+            const newBot = Math.max(MIN_ROW, Math.min(totalH - MIN_TOP, startBottom - dy));
+            bottomEl.style.flexBasis = newBot + 'px';
+          },
+          function() { handle.classList.remove('dragging'); saveSizes(); }
+        );
+      });
+    }
+
+    colDragger(
+      document.getElementById('rh-1'),
+      document.getElementById('panel-theory'),
+      document.getElementById('panel-code')
+    );
+    colDraggerRight(
+      document.getElementById('rh-2'),
+      document.getElementById('panel-code')
+    );
+    rowDragger(
+      document.getElementById('rh-3'),
+      document.querySelector('.test-top'),
+      document.getElementById('panel-logs')
+    );
+
+    loadSizes();
+  })();
+
+  // ── Progress tracking & next-lesson lock ─────────────────────────────────
+  (function() {
+    const VOLUME_ID   = '{{ volume_id }}';
+    const CHAPTER_ID  = '{{ chapter_id }}';
+    const LESSON_ID   = '{{ lesson_id }}';
+    const TOTAL_STEPS = {{ scenario.steps | length if scenario else 0 }};
+    const LESSON_KEY  = VOLUME_ID + '/' + CHAPTER_ID + '/' + LESSON_ID;
+    const STORE_KEY   = 's1t_progress';
+
+    function isCompleted() {
+      try {
+        return JSON.parse(localStorage.getItem(STORE_KEY) || '{}')[LESSON_KEY] === 'completed';
+      } catch(_) { return false; }
+    }
+
+    function syncStatusDot() {
+      const dot = document.getElementById('lesson-status-dot');
+      if (!dot) return;
+      dot.classList.toggle('completed', isCompleted());
+    }
+
+    function syncDoneButton() {
+      const btn = document.getElementById('done-btn');
+      if (!btn) return;
+      const label = s1tLang.t('done_btn');
+      if (isCompleted()) {
+        btn.classList.add('completed');
+        btn.innerHTML = '&#10003; ' + label;
+      } else {
+        btn.classList.remove('completed');
+        btn.innerHTML = '&#10007; ' + label;
+      }
+    }
+
+    function syncNextButton() {
+      const btn = document.getElementById('next-lesson-link');
+      if (!btn) return;
+      const adminMode = localStorage.getItem('s1t_admin') === 'on';
+      if (adminMode || isCompleted()) {
+        btn.classList.remove('btn-locked');
+      } else {
+        btn.classList.add('btn-locked');
+      }
+    }
+
+    window.markLessonComplete = function() {
+      try {
+        const p = JSON.parse(localStorage.getItem(STORE_KEY) || '{}');
+        if (p[LESSON_KEY] !== 'completed') {
+          p[LESSON_KEY] = 'completed';
+          localStorage.setItem(STORE_KEY, JSON.stringify(p));
+        }
+      } catch(_) {}
+      syncNextButton();
+      syncStatusDot();
+      syncDoneButton();
+    };
+
+    window.onDoneClick = function() {
+      markLessonComplete();
+      const overlay = document.getElementById('success-overlay');
+      if (overlay) overlay.style.display = 'flex';
+    };
+
+    // challenge/bugfix: mark complete when all steps pass
+    if (TOTAL_STEPS > 0) {
+      document.addEventListener('htmx:afterSwap', function(evt) {
+        if (evt.detail.target.id && evt.detail.target.id.startsWith('step-result-')) {
+          const passed = document.querySelectorAll('.step-status-badge.passed').length;
+          if (passed >= TOTAL_STEPS) markLessonComplete();
+        }
+      });
+    }
+
+    syncNextButton();
+    syncStatusDot();
+    syncDoneButton();
+
+    document.addEventListener('s1t:langchange', syncDoneButton);
+
+    const adminBadge = document.getElementById('admin-badge');
+    if (adminBadge) {
+      adminBadge.style.display = localStorage.getItem('s1t_admin') === 'on' ? 'inline-block' : 'none';
+    }
+  })();
+
+  // ── Shift+scroll → horizontal scroll in test/logs panels ──────────────────
+  (function() {
+    function addShiftScroll(selector) {
+      const el = document.querySelector(selector);
+      if (!el) return;
+      el.addEventListener('wheel', function(e) {
+        if (e.shiftKey && e.deltaY !== 0) {
+          e.preventDefault();
+          el.scrollLeft += e.deltaY;
+        }
+      }, { passive: false });
+    }
+    addShiftScroll('.test-content');
+    addShiftScroll('.logs-content');
+  })();
+
+</script>
+{% endblock %}

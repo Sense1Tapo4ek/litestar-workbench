@@ -1,0 +1,12 @@
+steps:
+  - name: "Platform info"
+    method: GET
+    path: /
+    expect_status: 200
+    description: "Возвращает название платформы и флаг ready — не пустой объект"
+
+  - name: "Ping"
+    method: GET
+    path: /ping
+    expect_status: 200
+    description: "Возвращает {\"pong\": true} — не 404"

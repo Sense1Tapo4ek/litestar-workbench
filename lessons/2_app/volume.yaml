@@ -1,0 +1,14 @@
+description_en: Application lifecycle, State, hooks, OpenAPI, CLI, layered architecture.
+  DataclassDTO, PydanticDTO, MsgspecDTO, DTOData and PATCH patterns.
+description_ru: "\u0416\u0438\u0437\u043D\u0435\u043D\u043D\u044B\u0439 \u0446\u0438\
+  \u043A\u043B \u043F\u0440\u0438\u043B\u043E\u0436\u0435\u043D\u0438\u044F, State,\
+  \ \u0445\u0443\u043A\u0438, OpenAPI, CLI, \u0441\u043B\u043E\u0451\u043D\u0430\u044F\
+  \ \u0430\u0440\u0445\u0438\u0442\u0435\u043A\u0442\u0443\u0440\u0430. DataclassDTO,\
+  \ PydanticDTO, MsgspecDTO, DTOData \u0438 PATCH-\u043F\u0430\u0442\u0442\u0435\u0440\
+  \u043D\u044B."
+order: 2
+summary_en: Lifecycle, tooling, DTOs
+summary_ru: "\u0416\u0438\u0437\u043D\u0435\u043D\u043D\u044B\u0439 \u0446\u0438\u043A\
+  \u043B, \u0438\u043D\u0441\u0442\u0440\u0443\u043C\u0435\u043D\u0442\u044B, DTO"
+title_en: Litestar Application
+title_ru: "\u041F\u0440\u0438\u043B\u043E\u0436\u0435\u043D\u0438\u0435 Litestar"

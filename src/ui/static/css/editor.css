@@ -1,0 +1,202 @@
+/* ── Lesson status dot (topbar) ── */
+.lesson-status-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background-color: var(--accent-mustard);
+  flex-shrink: 0;
+  transition: background-color 0.25s;
+}
+
+.lesson-status-dot.completed {
+  background-color: var(--accent-sage);
+}
+
+/* ── Done button (scenario panel header) ── */
+.btn-done {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  padding: 3px 10px;
+  border-radius: var(--radius-sm);
+  font-size: 11px;
+  font-weight: 600;
+  cursor: pointer;
+  border: none;
+  background-color: var(--accent-mustard-bg-strong);
+  color: var(--accent-mustard);
+  transition: background-color 0.2s, color 0.2s;
+  white-space: nowrap;
+}
+
+.btn-done:hover {
+  background-color: rgba(223, 168, 66, 0.25);
+}
+
+.btn-done.completed {
+  background-color: var(--accent-sage-bg-strong);
+  color: var(--accent-sage);
+}
+
+.btn-done.completed:hover {
+  background-color: rgba(98, 153, 106, 0.25);
+}
+
+/* ── Success overlay ── */
+.success-overlay {
+  position: fixed;
+  inset: 0;
+  background-color: rgba(30, 28, 26, 0.72);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+  backdrop-filter: blur(2px);
+}
+
+.success-overlay-card {
+  background-color: var(--bg-elevated);
+  border-radius: var(--radius-lg);
+  padding: 40px 48px;
+  text-align: center;
+  max-width: 360px;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 12px;
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.35);
+}
+
+.success-overlay-icon {
+  width: 64px;
+  height: 64px;
+  border-radius: 50%;
+  background-color: var(--accent-sage-bg-strong);
+  border: 2px solid var(--accent-sage);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 28px;
+  color: var(--accent-sage);
+  font-weight: 700;
+  margin-bottom: 4px;
+}
+
+.success-overlay-title {
+  font-size: 20px;
+  font-weight: 600;
+  color: var(--text-primary);
+}
+
+.success-overlay-subtitle {
+  font-size: 13px;
+  color: var(--text-muted);
+}
+
+.success-overlay-actions {
+  display: flex;
+  gap: 10px;
+  margin-top: 8px;
+}
+
+/* ── Next-lesson lock ── */
+.btn-locked {
+  opacity: 0.35;
+  pointer-events: none;
+}
+
+/* ── CodeMirror container ── */
+#cm-editor {
+  flex: 1;
+  overflow: hidden;
+  background-color: var(--bg-code);
+}
+
+#cm-editor .cm-editor {
+  height: 100%;
+  outline: none;
+}
+
+#cm-editor .cm-scroller {
+  overflow: auto;
+  font-family: var(--font-mono);
+  font-size: 13px;
+  line-height: 1.5;
+}
+
+#cm-editor .cm-editor.cm-focused {
+  outline: none;
+}
+
+/* ── Code toolbar ── */
+.code-toolbar {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 0 12px;
+  height: 32px;
+  background-color: var(--bg-code-tabs);
+  border-bottom: 1px solid var(--border-code);
+  flex-shrink: 0;
+}
+
+.code-toolbar .btn {
+  font-size: 11px;
+  padding: 2px 10px;
+  height: 24px;
+}
+
+.save-indicator {
+  font-size: 11px;
+  color: var(--accent-sage);
+  opacity: 0;
+  transition: opacity 0.2s;
+  font-family: var(--font-mono);
+}
+
+.save-indicator.visible {
+  opacity: 1;
+}
+
+.save-indicator.error {
+  color: var(--accent-terracotta);
+}
+
+/* ── Modified dot on tabs ── */
+.modified-dot {
+  display: none;
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background-color: var(--accent-mustard);
+  flex-shrink: 0;
+}
+
+
+/* ── Mode badge ── */
+.mode-badge {
+  font-size: 10px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  padding: 2px 8px;
+  border-radius: var(--radius-sm);
+  flex-shrink: 0;
+}
+
+.mode-badge-challenge {
+  color: var(--accent-mustard);
+  background-color: var(--accent-mustard-bg);
+}
+
+.mode-badge-bugfix {
+  color: var(--accent-terracotta);
+  background-color: var(--accent-terracotta-bg);
+}
+
+.mode-badge-admin {
+  color: var(--accent-mustard);
+  background-color: var(--accent-mustard-bg);
+}
+

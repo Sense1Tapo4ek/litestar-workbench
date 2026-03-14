@@ -1,0 +1,12 @@
+.venv/
+__pycache__/
+*.pyc
+*.pyo
+.workspaces/
+node_modules/
+.env
+.env.*
+*.md
+!README.md
+.git/
+.gitignore

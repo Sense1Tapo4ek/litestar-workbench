@@ -1,0 +1,38 @@
+description: "SessionAuth -- аутентификация через серверные сессии"
+steps:
+  - name: "Public endpoint"
+    method: GET
+    path: /public
+    expect_status: 200
+    description: "Не требует аутентификации (exclude)"
+
+  - name: "Profile without session"
+    method: GET
+    path: /me
+    expect_status: 401
+    description: "Без активной сессии -- 401"
+
+  - name: "Login Alice"
+    method: POST
+    path: /login
+    body: {"username": "alice"}
+    expect_status: 201
+    description: "Создаём сессию для Alice"
+
+  - name: "Profile Alice"
+    method: GET
+    path: /me
+    expect_status: 200
+    description: "Cookie сессии автоматически передаётся"
+
+  - name: "Logout"
+    method: POST
+    path: /logout
+    expect_status: 200
+    description: "Очищаем сессию"
+
+  - name: "Profile after logout"
+    method: GET
+    path: /me
+    expect_status: 401
+    description: "Сессия очищена -- снова 401"

@@ -1,0 +1,30 @@
+steps:
+  - name: "First request — compute (call_count=1)"
+    method: GET
+    path: /compute
+    expect_status: 200
+
+  - name: "Second request — from cache (call_count unchanged)"
+    method: GET
+    path: /compute
+    expect_status: 200
+
+  - name: "Compute count = 1 (handler called once)"
+    method: GET
+    path: /calls
+    expect_status: 200
+
+  - name: "Greeting EN (lang_calls=1)"
+    method: GET
+    path: /greeting?lang=en
+    expect_status: 200
+
+  - name: "Greeting ES (different cache key, lang_calls=2)"
+    method: GET
+    path: /greeting?lang=es
+    expect_status: 200
+
+  - name: "Greeting EN again (from cache, lang_calls stays 2)"
+    method: GET
+    path: /greeting?lang=en
+    expect_status: 200

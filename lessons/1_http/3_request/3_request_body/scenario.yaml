@@ -1,0 +1,28 @@
+description: "Проверяет приём JSON, URL-encoded формы и валидацию тела запроса"
+steps:
+  - name: "Create product"
+    method: POST
+    path: "/products"
+    body:
+      name: "Laptop"
+      price: 999.99
+      tags: ["electronics", "sale"]
+    expect_status: 201
+    description: "JSON-тело парсится в dataclass, возвращается 201"
+
+  - name: "Send invalid product"
+    method: POST
+    path: "/products"
+    body:
+      price: 100
+    expect_status: 400
+    description: "Отсутствует обязательное поле name -- Litestar возвращает 400"
+
+  - name: "Submit contact form"
+    method: POST
+    path: "/contact"
+    headers:
+      Content-Type: "application/x-www-form-urlencoded"
+    raw_body: "name=Alice&email=alice@example.com&message=Hello"
+    expect_status: 201
+    description: "URL-encoded данные парсятся в dict с ключами name, email, message"

@@ -1,0 +1,51 @@
+description: "Stores challenge: кэш + rate limiting"
+steps:
+  - name: "First report call"
+    method: GET
+    path: /report
+    expect_status: 200
+    description: "Первый вызов — вычисляет данные"
+
+  - name: "Second report call (cached)"
+    method: GET
+    path: /report
+    expect_status: 200
+    description: "Второй вызов — должен вернуть кэш (computed_at_call одинаковый)"
+
+  - name: "Check call count (should be 1)"
+    method: GET
+    path: /calls
+    expect_status: 200
+    description: "Проверяет эндпоинт /calls (если кэш работает, count == 1)"
+
+  - name: "Create item #1"
+    method: POST
+    path: /items
+    body:
+      name: "Widget"
+    expect_status: 201
+    description: "1й запрос из 3 разрешённых"
+
+  - name: "Create item #2"
+    method: POST
+    path: /items
+    body:
+      name: "Gadget"
+    expect_status: 201
+    description: "2й запрос"
+
+  - name: "Create item #3"
+    method: POST
+    path: /items
+    body:
+      name: "Doohickey"
+    expect_status: 201
+    description: "3й запрос — последний разрешённый"
+
+  - name: "Create item #4 (rate limited)"
+    method: POST
+    path: /items
+    body:
+      name: "Thingamajig"
+    expect_status: 429
+    description: "4й запрос превышает лимит — 429"

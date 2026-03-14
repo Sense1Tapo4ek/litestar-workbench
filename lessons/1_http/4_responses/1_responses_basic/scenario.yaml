@@ -1,0 +1,30 @@
+steps:
+  - name: "JSON response"
+    method: GET
+    path: /json
+    expect_status: 200
+    description: "Возвращает Item в формате JSON"
+
+  - name: "Text response"
+    method: GET
+    path: /text
+    expect_status: 200
+    description: "Content-Type: text/plain, тело — строка"
+
+  - name: "HTML response"
+    method: GET
+    path: /html
+    expect_status: 200
+    description: "Content-Type: text/html"
+
+  - name: "Redirect"
+    method: GET
+    path: /redirect
+    expect_status: 302
+    description: "Redirect на /json — сервер возвращает 302 с заголовком Location"
+
+  - name: "Custom response"
+    method: GET
+    path: /custom
+    expect_status: 201
+    description: "Response с явным status_code=201 и X-Request-Id заголовком"

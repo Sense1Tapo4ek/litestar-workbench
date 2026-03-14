@@ -1,0 +1,18 @@
+steps:
+  - name: "First request"
+    method: GET
+    path: /
+    expect_status: 200
+    description: "db_connected=true, requests_served=1"
+
+  - name: "Readiness"
+    method: GET
+    path: /ready
+    expect_status: 200
+    description: "ready=true — lifespan отработал при старте"
+
+  - name: "Counter increments"
+    method: GET
+    path: /
+    expect_status: 200
+    description: "requests_served=2 — счётчик увеличивается с каждым запросом"

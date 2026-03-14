@@ -1,0 +1,20 @@
+description: "Security backends: найди и исправь 3 ошибки"
+steps:
+  - name: "Публичный эндпоинт (items)"
+    method: GET
+    path: /items
+    expect_status: 200
+    description: "/items в exclude -- работает без аутентификации"
+
+  - name: "Логин"
+    method: POST
+    path: /login
+    body: {"username": "alice"}
+    expect_status: 201
+    description: "Логин должен работать без аутентификации"
+
+  - name: "Профиль"
+    method: GET
+    path: /me
+    expect_status: 200
+    description: "После логина cookie передаётся автоматически"

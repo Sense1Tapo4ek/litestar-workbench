@@ -1,0 +1,34 @@
+steps:
+  - name: "Store info"
+    method: GET
+    path: /store/info
+    expect_status: 200
+
+  - name: "Set value (TTL 300s)"
+    method: POST
+    path: /store/set
+    body:
+      key: "greet"
+      value: "hello"
+      ttl: 300
+    expect_status: 201
+
+  - name: "Get value"
+    method: GET
+    path: /store/get/greet
+    expect_status: 200
+
+  - name: "Key exists"
+    method: GET
+    path: /store/exists/greet
+    expect_status: 200
+
+  - name: "Delete key"
+    method: DELETE
+    path: /store/del/greet
+    expect_status: 204
+
+  - name: "Key does not exist after deletion"
+    method: GET
+    path: /store/exists/greet
+    expect_status: 200

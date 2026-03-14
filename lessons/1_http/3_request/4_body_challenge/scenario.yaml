@@ -1,0 +1,53 @@
+description: "Проверяет создание, обновление и публикацию статей через Articles API"
+steps:
+  - name: "Create article"
+    method: POST
+    path: "/articles"
+    body:
+      title: "Litestar Guide"
+      content: "Introduction to Litestar framework"
+      tags: ["python", "web"]
+    expect_status: 201
+    save_as: article
+    description: "Создаёт статью, возвращает 201 с id и published=false"
+
+  - name: "Create article without title"
+    method: POST
+    path: "/articles"
+    body:
+      content: "No title here"
+    expect_status: 400
+    description: "Обязательное поле title отсутствует -- 400"
+
+  - name: "Update article"
+    method: PUT
+    path: "/articles/{article.id}"
+    body:
+      title: "Updated Guide"
+      content: "Updated content"
+      tags: ["python"]
+    expect_status: 200
+    description: "Полная замена статьи, возвращает обновлённые данные"
+
+  - name: "Update nonexistent article"
+    method: PUT
+    path: "/articles/9999"
+    body:
+      title: "Ghost"
+      content: "Nothing"
+    expect_status: 404
+    description: "Статья с id=9999 не существует -- 404"
+
+  - name: "Publish article"
+    method: POST
+    path: "/articles/{article.id}/publish"
+    expect_status: 200
+    expect_json:
+      published: true
+    description: "Публикация ставит published=true"
+
+  - name: "Publish nonexistent article"
+    method: POST
+    path: "/articles/9999/publish"
+    expect_status: 404
+    description: "Статья с id=9999 не существует -- 404"

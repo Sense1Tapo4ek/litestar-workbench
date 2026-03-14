@@ -1,0 +1,28 @@
+description: "Проверяет MsgspecDTO и встроенную валидацию типов msgspec"
+steps:
+  - name: "Create user"
+    method: POST
+    path: "/users"
+    body:
+      username: "alice"
+      email: "alice@example.com"
+      password: "secret123"
+    expect_status: 201
+    description: "Создаём пользователя через MsgspecDTO — password отсутствует в ответе"
+    save_as: user
+
+  - name: "Get user"
+    method: GET
+    path: "/users/${user.id}"
+    expect_status: 200
+    description: "GET по id — ответ содержит id, username, email, role, created_at"
+
+  - name: "Wrong field type"
+    method: POST
+    path: "/users"
+    body:
+      username: 123
+      email: "bob@example.com"
+      password: "pass1234"
+    expect_status: 400
+    description: "username должен быть str, пришёл int — msgspec возвращает 400"

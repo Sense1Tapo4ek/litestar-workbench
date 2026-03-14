@@ -1,0 +1,13 @@
+description_en: Key-value stores (MemoryStore, Valkey), response caching, rate limiting,
+  server-side sessions, SQLAlchemy ORM.
+description_ru: "Key-value stores (MemoryStore, Valkey), \u043A\u044D\u0448\u0438\u0440\
+  \u043E\u0432\u0430\u043D\u0438\u0435 \u043E\u0442\u0432\u0435\u0442\u043E\u0432\
+  , rate limiting, \u0441\u0435\u0440\u0432\u0435\u0440\u043D\u044B\u0435 \u0441\u0435\
+  \u0441\u0441\u0438\u0438, SQLAlchemy ORM."
+order: 4
+summary_en: Stores, caching, ORM
+summary_ru: "Stores, \u043A\u044D\u0448\u0438\u0440\u043E\u0432\u0430\u043D\u0438\u0435\
+  , ORM"
+title_en: Data & Storage
+title_ru: "\u0414\u0430\u043D\u043D\u044B\u0435 & \u0425\u0440\u0430\u043D\u0435\u043D\
+  \u0438\u0435"

@@ -1,0 +1,5 @@
+order: 5
+title_en: Configuration
+title_ru: "Конфигурация"
+description_en: "Application configuration with pydantic-settings: .env files, environment variables, dev/prod separation."
+description_ru: "Конфигурация приложения через pydantic-settings: .env файлы, переменные окружения, разделение dev/prod."

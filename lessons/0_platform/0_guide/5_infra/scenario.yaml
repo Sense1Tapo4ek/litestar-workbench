@@ -1,0 +1,18 @@
+steps:
+  - name: "Valkey ping"
+    method: GET
+    path: /valkey
+    expect_status: 200
+    description: "Valkey отвечает на порту 6379"
+
+  - name: "RabbitMQ ping"
+    method: GET
+    path: /rabbitmq
+    expect_status: 200
+    description: "RabbitMQ отвечает на порту 5672"
+
+  - name: "PostgreSQL ping"
+    method: GET
+    path: /postgres
+    expect_status: 200
+    description: "PostgreSQL отвечает на порту 5432"

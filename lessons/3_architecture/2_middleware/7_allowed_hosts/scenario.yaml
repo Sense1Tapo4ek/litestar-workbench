@@ -1,0 +1,13 @@
+description: "AllowedHostsMiddleware — контроль Host-заголовка"
+steps:
+  - name: "Request with allowed host"
+    method: GET
+    path: /api/data
+    expect_status: 200
+    description: "localhost в allowed_hosts — запрос проходит"
+
+  - name: "Health check"
+    method: GET
+    path: /health
+    expect_status: 200
+    description: "Healthcheck доступен"

@@ -1,0 +1,154 @@
+/* ── Buttons ── */
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 5px;
+  padding: 6px 14px;
+  font-family: var(--font-sans);
+  font-size: 13px;
+  font-weight: 500;
+  border-radius: var(--radius-sm);
+  cursor: pointer;
+  transition: all 0.15s ease;
+  border: 1px solid transparent;
+  outline: none;
+  text-decoration: none;
+  white-space: nowrap;
+}
+.btn:active { transform: translateY(1px); }
+
+.btn-primary {
+  background-color: var(--accent-sage);
+  color: var(--bg-elevated);
+}
+.btn-primary:hover { background-color: #5a8f62; }
+
+.btn-danger {
+  background-color: var(--accent-terracotta-bg);
+  color: var(--accent-terracotta);
+  border-color: rgba(186, 87, 74, 0.2);
+}
+.btn-danger:hover { background-color: var(--accent-terracotta-bg-strong); }
+
+.btn-ghost {
+  background-color: transparent;
+  color: var(--text-tertiary);
+}
+.btn-ghost:hover {
+  background-color: var(--bg-hover);
+  color: var(--text-secondary);
+}
+
+.btn-sm {
+  padding: 4px 10px;
+  font-size: 12px;
+}
+
+/* Prevent server start/stop button from shifting layout when text changes */
+.server-status-row .btn {
+  min-width: 68px;
+  flex-shrink: 0;
+}
+
+.btn:disabled {
+  opacity: 0.45;
+  cursor: not-allowed;
+  pointer-events: none;
+}
+
+/* ── Badges ── */
+.badge {
+  display: inline-flex;
+  padding: 2px 7px;
+  border-radius: var(--radius-sm);
+  font-family: var(--font-mono);
+  font-size: 11px;
+  font-weight: 600;
+  text-transform: uppercase;
+}
+.badge-get    { color: var(--method-get);    background-color: var(--method-get-bg); }
+.badge-post   { color: var(--method-post);   background-color: var(--method-post-bg); }
+.badge-put    { color: var(--method-put);    background-color: var(--method-put-bg); }
+.badge-patch  { color: var(--method-patch);  background-color: var(--method-patch-bg); }
+.badge-delete { color: var(--method-delete); background-color: var(--method-delete-bg); }
+
+/* ── Server indicator ── */
+.server-status {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  font-size: 12px;
+  font-family: var(--font-mono);
+  color: var(--text-tertiary);
+}
+
+.server-dot {
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background-color: var(--text-muted);
+  flex-shrink: 0;
+}
+
+.server-dot.running {
+  background-color: var(--accent-sage);
+  box-shadow: 0 0 6px var(--accent-sage);
+}
+
+.server-dot.starting,
+.server-dot.stopping {
+  background-color: var(--accent-mustard);
+  animation: pulse-dot 1s ease-in-out infinite;
+}
+
+.server-dot.conflict {
+  background-color: var(--accent-orange, #c0622a);
+}
+
+@keyframes pulse-dot {
+  0%, 100% { box-shadow: 0 0 0 0 rgba(223, 168, 66, 0.4); }
+  50%       { box-shadow: 0 0 0 4px rgba(223, 168, 66, 0); }
+}
+
+/* ── Status icons ── */
+.status-icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 22px;
+  height: 22px;
+  border-radius: 50%;
+  font-size: 11px;
+  flex-shrink: 0;
+}
+.status-completed { color: var(--accent-sage);     background-color: var(--accent-sage-bg-strong); }
+.status-active    { color: var(--accent-mustard);  background-color: var(--accent-mustard-bg-strong); }
+.status-locked    { color: var(--text-muted);      background-color: var(--bg-inset); }
+
+/* ── Theme / Lang toggles ── */
+.theme-toggle,
+.lang-toggle {
+  padding: 4px 8px;
+  font-size: 13px;
+  line-height: 1;
+}
+
+/* Moon icon in light mode → click to go dark */
+.theme-toggle::after { content: '☾'; }
+[data-theme="dark"] .theme-toggle::after { content: '☀'; }
+
+/* Show opposite lang label → click to switch */
+.lang-toggle::after {
+  content: 'EN';
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.04em;
+}
+[data-lang="en"] .lang-toggle::after { content: 'RU'; }
+
+/* ── CSS-based language visibility ── */
+/* Default (ru): hide English-only spans */
+.lang-en { display: none; }
+[data-lang="en"] .lang-en { display: inline; }
+[data-lang="en"] .lang-ru { display: none; }

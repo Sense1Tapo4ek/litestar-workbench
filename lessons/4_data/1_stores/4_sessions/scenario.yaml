@@ -1,0 +1,28 @@
+steps:
+  - name: "Profile before login (no session)"
+    method: GET
+    path: /me
+    expect_status: 200
+
+  - name: "Login as alice"
+    method: POST
+    path: /login
+    body:
+      username: "alice"
+      role: "admin"
+    expect_status: 201
+
+  - name: "Profile — session saved"
+    method: GET
+    path: /me
+    expect_status: 200
+
+  - name: "Logout"
+    method: POST
+    path: /logout
+    expect_status: 201
+
+  - name: "Profile after logout (session cleared)"
+    method: GET
+    path: /me
+    expect_status: 200

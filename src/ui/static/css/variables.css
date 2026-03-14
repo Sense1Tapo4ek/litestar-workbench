@@ -1,0 +1,155 @@
+:root {
+  /* Backgrounds */
+  --bg-page:          #F2F2F0;
+  --bg-card:          #FAFAF8;
+  --bg-elevated:      #FEFDFB;
+  --bg-inset:         #ECEAE6;
+  --bg-hover:         #F6F5F3;
+  --bg-code:          #2A2826;
+  --bg-code-hover:    #33302E;
+  --bg-code-tabs:     #33302E;
+
+  /* Text */
+  --text-primary:     #2C2E2D;
+  --text-secondary:   #595C5B;
+  --text-tertiary:    #8A8886;
+  --text-muted:       #B0ADA8;
+  --text-on-dark:     #E8E4DF;
+  --text-on-dark-dim: #8F8A84;
+
+  /* Accents */
+  --accent-sage:            #62996A;
+  --accent-sage-bg:         rgba(98, 153, 106, 0.08);
+  --accent-sage-bg-strong:  rgba(98, 153, 106, 0.15);
+  --accent-mustard:         #DFA842;
+  --accent-mustard-bg:      rgba(223, 168, 66, 0.08);
+  --accent-mustard-bg-strong: rgba(223, 168, 66, 0.15);
+  --accent-terracotta:      #BA574A;
+  --accent-terracotta-bg:   rgba(186, 87, 74, 0.08);
+  --accent-terracotta-bg-strong: rgba(186, 87, 74, 0.15);
+  --accent-blue:            #558EB5;
+  --accent-blue-bg:         rgba(85, 142, 181, 0.08);
+  --accent-lavender:        #9584C9;
+
+  /* Borders & shadows */
+  --border:          #E8E6E3;
+  --border-light:    #F0EEEB;
+  --border-code:     #3D3A37;
+  --shadow-card:     0 2px 20px rgba(66, 69, 68, 0.06);
+  --shadow-elevated: 0 4px 30px rgba(66, 69, 68, 0.10);
+
+  /* Japandi paper */
+  --shadow-paper:    0 8px 32px rgba(60, 50, 40, 0.07);
+  --shadow-paper-hover: 0 12px 40px rgba(60, 50, 40, 0.11);
+  --radius-card:     4px;
+
+  /* HTTP Method badges */
+  --method-get:        #62996A;
+  --method-get-bg:     rgba(98, 153, 106, 0.10);
+  --method-post:       #558EB5;
+  --method-post-bg:    rgba(85, 142, 181, 0.10);
+  --method-put:        #DFA842;
+  --method-put-bg:     rgba(223, 168, 66, 0.10);
+  --method-patch:      #C98852;
+  --method-patch-bg:   rgba(201, 136, 82, 0.10);
+  --method-delete:     #BA574A;
+  --method-delete-bg:  rgba(186, 87, 74, 0.10);
+
+  /* Log levels */
+  --log-info:    #62996A;
+  --log-debug:   #B0ADA8;
+  --log-warning: #DFA842;
+  --log-error:   #BA574A;
+
+  /* Typography */
+  --font-sans: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+  --font-mono: 'JetBrains Mono', 'Fira Code', monospace;
+
+  /* Border radius */
+  --radius-sm: 6px;
+  --radius-md: 10px;
+  --radius-lg: 14px;
+
+  /* Layout */
+  --topbar-height:       44px;
+  --panel-header-height: 38px;
+  --panel-theory-width:  28%;
+  --panel-code-width:    38%;
+  --panel-test-width:    34%;
+  --panel-test-split:    55%;
+
+  /* WebSocket message colors */
+  --ws-sent:     #558EB5;
+  --ws-sent-bg:  rgba(85, 142, 181, 0.06);
+  --ws-recv:     #62996A;
+  --ws-recv-bg:  rgba(98, 153, 106, 0.06);
+  --ws-sys:      #B0ADA8;
+  --ws-sys-bg:   transparent;
+  --ws-error:    #BA574A;
+  --ws-error-bg: rgba(186, 87, 74, 0.06);
+
+  /* Code syntax */
+  --code-bg:          #242220;
+  --code-text:        #E8E4DF;
+  --code-keyword:     #B098D9;
+  --code-string:      #A8C78B;
+  --code-number:      #E0B86E;
+  --code-decorator:   #DF9B6B;
+  --code-comment:     #7A7672;
+  --code-function:    #8CB3CD;
+  --code-type:        #D1B288;
+  --code-operator:    #A39E99;
+  --code-line-nr:     #5A5654;
+  --code-line-hover:  #2D2A28;
+  --code-tab-active:  #DF9B6B;
+}
+
+[data-theme="dark"] {
+  /* Backgrounds */
+  --bg-page:     #2A2826;
+  --bg-card:     #302D2B;
+  --bg-elevated: #363330;
+  --bg-inset:    #1E1C1A;
+  --bg-hover:    #322F2D;
+
+  /* Code panel (darker than page so it stands out) */
+  --bg-code:      #1C1A18;
+  --bg-code-hover:#282624;
+  --bg-code-tabs: #222020;
+
+  /* Text */
+  --text-primary:   #E8E4DF;
+  --text-secondary: #B5B0A8;
+  --text-tertiary:  #7A7672;
+  --text-muted:     #514D4A;
+
+  /* Borders & shadows */
+  --border:          #3D3A37;
+  --border-light:    #332F2D;
+  --border-code:     #2A2826;
+  --shadow-card:     0 2px 20px rgba(0,0,0,0.30);
+  --shadow-elevated: 0 4px 30px rgba(0,0,0,0.50);
+  --shadow-paper:    0 8px 32px rgba(0, 0, 0, 0.35);
+  --shadow-paper-hover: 0 12px 40px rgba(0, 0, 0, 0.45);
+
+  /* Accent backgrounds — more opaque on dark */
+  --accent-sage-bg:              rgba(98,153,106,0.15);
+  --accent-sage-bg-strong:       rgba(98,153,106,0.25);
+  --accent-mustard-bg:           rgba(223,168,66,0.15);
+  --accent-mustard-bg-strong:    rgba(223,168,66,0.25);
+  --accent-terracotta-bg:        rgba(186,87,74,0.15);
+  --accent-terracotta-bg-strong: rgba(186,87,74,0.25);
+  --accent-blue-bg:              rgba(85,142,181,0.15);
+
+  /* HTTP method badge backgrounds */
+  --method-get-bg:    rgba(98,153,106,0.15);
+  --method-post-bg:   rgba(85,142,181,0.15);
+  --method-put-bg:    rgba(223,168,66,0.15);
+  --method-patch-bg:  rgba(201,136,82,0.15);
+  --method-delete-bg: rgba(186,87,74,0.15);
+
+  /* WS message backgrounds */
+  --ws-sent-bg:  rgba(85,142,181,0.12);
+  --ws-recv-bg:  rgba(98,153,106,0.12);
+  --ws-error-bg: rgba(186,87,74,0.12);
+}

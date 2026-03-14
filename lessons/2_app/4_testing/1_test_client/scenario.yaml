@@ -1,0 +1,35 @@
+description: "TestClient — тестирование Litestar без сервера. Урок демонстрирует API через scenario."
+steps:
+  - name: "Create task"
+    method: POST
+    path: /tasks
+    body:
+      title: "Buy milk"
+      done: false
+    expect_status: 201
+    description: "Создаём задачу"
+    save_as: task
+
+  - name: "Get task"
+    method: GET
+    path: /tasks/${task.id}
+    expect_status: 200
+    description: "Получаем по id"
+
+  - name: "List tasks"
+    method: GET
+    path: /tasks
+    expect_status: 200
+    description: "Список всех задач"
+
+  - name: "Get nonexistent"
+    method: GET
+    path: /tasks/99999
+    expect_status: 404
+    description: "404 для несуществующей задачи"
+
+  - name: "Delete task"
+    method: DELETE
+    path: /tasks/${task.id}
+    expect_status: 204
+    description: "Удаляем задачу"

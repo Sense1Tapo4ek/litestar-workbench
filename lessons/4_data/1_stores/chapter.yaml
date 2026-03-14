@@ -1,0 +1,8 @@
+description_en: Stores, response caching, rate limiting, server-side sessions, Redis/Valkey.
+description_ru: "\u0425\u0440\u0430\u043D\u0438\u043B\u0438\u0449\u0430, \u043A\u044D\
+  \u0448\u0438\u0440\u043E\u0432\u0430\u043D\u0438\u0435 \u043E\u0442\u0432\u0435\u0442\
+  \u043E\u0432, rate limiting, \u0441\u0435\u0440\u0432\u0435\u0440\u043D\u044B\u0435\
+  \ \u0441\u0435\u0441\u0441\u0438\u0438, Redis/Valkey."
+order: 1
+title_en: Stores & Caching
+title_ru: Stores & Caching

@@ -1,0 +1,11 @@
+steps:
+  - name: "Home page"
+    method: GET
+    path: /
+    expect_status: 200
+    description: "Middleware выполняются в порядке регистрации"
+
+  - name: "Health check"
+    method: GET
+    path: /health
+    expect_status: 200

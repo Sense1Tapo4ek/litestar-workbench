@@ -1,0 +1,42 @@
+description: "Реализуй guards для защиты эндпоинтов"
+steps:
+  - name: "List items (public)"
+    method: GET
+    path: /items
+    expect_status: 200
+    description: "Без guard -- доступен всем"
+
+  - name: "Create without key"
+    method: POST
+    path: /items
+    body:
+      name: "New"
+    expect_status: 401
+    description: "POST /items без x-api-key -> 401"
+
+  - name: "Create with key"
+    method: POST
+    path: /items
+    headers:
+      x-api-key: "challenge-key-2024"
+    body:
+      name: "Created"
+    expect_status: 201
+    description: "POST /items с валидным ключом -> 201"
+
+  - name: "Admin without role"
+    method: GET
+    path: /admin/stats
+    headers:
+      x-api-key: "challenge-key-2024"
+    expect_status: 403
+    description: "API key ОК, но нет x-role: admin -> 403"
+
+  - name: "Admin with role"
+    method: GET
+    path: /admin/stats
+    headers:
+      x-api-key: "challenge-key-2024"
+      x-role: "admin"
+    expect_status: 200
+    description: "Оба guard пройдены -> 200"

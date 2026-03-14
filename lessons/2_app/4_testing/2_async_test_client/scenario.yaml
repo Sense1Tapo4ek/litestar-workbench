@@ -1,0 +1,22 @@
+description: "AsyncTestClient — асинхронное тестирование. Урок демонстрирует async API."
+steps:
+  - name: "Submit job"
+    method: POST
+    path: /jobs
+    body:
+      task: "process_data"
+    expect_status: 202
+    description: "Submits async job"
+    save_as: job
+
+  - name: "Get job status"
+    method: GET
+    path: /jobs/${job.job_id}
+    expect_status: 200
+    description: "Статус задания"
+
+  - name: "List jobs"
+    method: GET
+    path: /jobs
+    expect_status: 200
+    description: "Список всех заданий"

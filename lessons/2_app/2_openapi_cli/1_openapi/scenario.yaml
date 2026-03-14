@@ -1,0 +1,41 @@
+links:
+  - name: "ReDoc"
+    url: "/schema"
+  - name: "Swagger UI"
+    url: "/schema/swagger"
+
+steps:
+  - name: "List items"
+    method: GET
+    path: /items
+    expect_status: 200
+    description: "GET /items возвращает пустой список"
+
+  - name: "Create item"
+    method: POST
+    path: /items
+    body:
+      id: null
+      name: "Litestar Book"
+      price: 39.99
+    expect_status: 201
+    description: "POST /items создаёт Item"
+    save_as: item
+
+  - name: "Get by ID"
+    method: GET
+    path: "/items/${item.id}"
+    expect_status: 200
+    description: "GET /items/{id} возвращает Item"
+
+  - name: "Hidden endpoint works"
+    method: GET
+    path: /health
+    expect_status: 200
+    description: "GET /health работает, но отсутствует в схеме (include_in_schema=False)"
+
+  - name: "OpenAPI schema available"
+    method: GET
+    path: /schema/openapi.json
+    expect_status: 200
+    description: "GET /schema/openapi.json возвращает схему"

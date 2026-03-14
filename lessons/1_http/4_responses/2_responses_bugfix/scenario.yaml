@@ -1,0 +1,27 @@
+description: "Проверяет корректность ответов: plain text, redirect, custom status"
+steps:
+  - name: "Get JSON"
+    method: GET
+    path: /json
+    expect_status: 200
+    description: "Возвращает JSON-объект -- этот шаг проходит"
+
+  - name: "Get text"
+    method: GET
+    path: /text
+    expect_status: 200
+    headers:
+      Accept: "text/plain"
+    description: "Возвращает plain text без кавычек"
+
+  - name: "Perform redirect"
+    method: GET
+    path: /redirect
+    expect_status: 302
+    description: "Возвращает 307 с Location на /json"
+
+  - name: "Get custom response"
+    method: GET
+    path: /custom
+    expect_status: 200
+    description: "Возвращает JSON с кодом 200"

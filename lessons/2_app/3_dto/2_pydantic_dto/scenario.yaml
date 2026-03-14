@@ -1,0 +1,38 @@
+description: "Проверяет PydanticDTO и автоматическую валидацию Pydantic"
+steps:
+  - name: "Create user with valid data"
+    method: POST
+    path: "/users"
+    body:
+      username: "alice"
+      email: "Alice@Example.com"
+      password: "secret123"
+    expect_status: 201
+    description: "Валидный запрос — email переводится в нижний регистр валидатором, password отсутствует в ответе"
+    save_as: user
+
+  - name: "Invalid email"
+    method: POST
+    path: "/users"
+    body:
+      username: "bob"
+      email: "not-an-email"
+      password: "pass1234"
+    expect_status: 400
+    description: "email без @ — field_validator поднимает ValueError, Litestar возвращает 400"
+
+  - name: "Username too short"
+    method: POST
+    path: "/users"
+    body:
+      username: "ab"
+      email: "ab@example.com"
+      password: "pass1234"
+    expect_status: 400
+    description: "username короче min_length=3 — Pydantic Field возвращает 400"
+
+  - name: "Get created user"
+    method: GET
+    path: "/users/${user.id}"
+    expect_status: 200
+    description: "GET по id — ответ без поля password"

@@ -1,0 +1,35 @@
+description: "Проверяет Notes API на базе Controller -- 3 из 5 шагов падают до исправления"
+steps:
+  - name: "Get note list"
+    method: GET
+    path: /notes
+    expect_status: 200
+    description: "Возвращает пустой список заметок"
+
+  - name: "Create note"
+    method: POST
+    path: /notes
+    body:
+      title: "First note"
+      text: "Hello world"
+    expect_status: 201
+    save_as: note
+    description: "Создаёт заметку, возвращает 201 с id"
+
+  - name: "Get note by ID"
+    method: GET
+    path: /notes/${note.id}
+    expect_status: 200
+    description: "Возвращает заметку по ID"
+
+  - name: "Delete note"
+    method: DELETE
+    path: /notes/${note.id}
+    expect_status: 204
+    description: "Удаляет заметку, возвращает 204 без тела"
+
+  - name: "Confirm note deletion"
+    method: GET
+    path: /notes/${note.id}
+    expect_status: 404
+    description: "Заметка удалена -- 404"

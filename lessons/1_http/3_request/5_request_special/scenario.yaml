@@ -1,0 +1,31 @@
+steps:
+  - name: "Request info"
+    method: GET
+    path: /info
+    expect_status: 200
+    description: "Возвращает метод, путь и данные клиента из объекта Request"
+
+  - name: "Headers as params"
+    method: GET
+    path: /headers-demo
+    headers:
+      X-Request-Id: "abc-123"
+    expect_status: 200
+    description: "User-Agent и Accept извлекаются из заголовков, X-Request-Id передаётся явно"
+
+  - name: "Cookies as params"
+    method: GET
+    path: /cookie-demo
+    cookies:
+      theme: "dark"
+      session_id: "sess-42"
+    expect_status: 200
+    description: "theme и session_id передаются через cookie"
+
+  - name: "Raw body"
+    method: POST
+    path: /raw-body
+    body:
+      message: "hello"
+    expect_status: 201
+    description: "body: bytes получает JSON-тело как bytes, возвращает размер"

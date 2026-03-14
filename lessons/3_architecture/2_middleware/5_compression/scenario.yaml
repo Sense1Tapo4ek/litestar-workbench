@@ -1,0 +1,17 @@
+steps:
+  - name: "Small response (no compression)"
+    method: GET
+    path: /small
+    expect_status: 200
+    description: "Ответ меньше minimum_size — сжатие не применяется"
+
+  - name: "Large response"
+    method: GET
+    path: /large
+    expect_status: 200
+    description: "Ответ больше 500 байт — будет сжат gzip"
+
+  - name: "JSON data"
+    method: GET
+    path: /json-data
+    expect_status: 200

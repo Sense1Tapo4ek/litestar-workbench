@@ -1,0 +1,10 @@
+steps:
+  - name: "Mock overrides prod (CasualGreeter)"
+    method: GET
+    path: /greet/world
+    expect_status: 200
+
+  - name: "Verify implementation — CasualGreeter (not FormalGreeter)"
+    method: GET
+    path: /impl
+    expect_status: 200

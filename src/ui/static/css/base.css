@@ -1,0 +1,77 @@
+/* Reset */
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+body {
+  font-family: var(--font-sans);
+  background-color: var(--bg-page);
+  color: var(--text-primary);
+  font-size: 14px;
+  line-height: 1.5;
+  -webkit-font-smoothing: antialiased;
+}
+
+/* ── Misc ── */
+.ml-auto { margin-left: auto; }
+
+.panel-header-meta {
+  margin-left: auto;
+  font-size: 11px;
+  color: var(--text-muted);
+}
+
+.empty-hint {
+  color: var(--text-muted);
+  margin-top: 40px;
+  text-align: center;
+  font-size: 12px;
+}
+
+.code-empty {
+  padding: 20px;
+  color: var(--text-on-dark-dim);
+  font-size: 13px;
+}
+
+.divider-vert {
+  width: 1px;
+  height: 18px;
+  background-color: var(--border);
+  flex-shrink: 0;
+}
+
+/* ── Scrollbar ── */
+::-webkit-scrollbar { width: 6px; height: 6px; }
+::-webkit-scrollbar-track { background: transparent; }
+::-webkit-scrollbar-thumb { background: var(--border); border-radius: 3px; }
+::-webkit-scrollbar-thumb:hover { background: var(--text-muted); }
+
+/* ── HTMX loading indicator ── */
+.htmx-request .htmx-indicator { opacity: 1; }
+.htmx-indicator { opacity: 0; transition: opacity 0.2s; }
+
+/* ── Japandi paper texture ── */
+.paper {
+  position: relative;
+  background-color: var(--bg-elevated);
+  border-radius: var(--radius-card);
+  box-shadow: var(--shadow-paper);
+  border: 1px solid var(--border);
+}
+
+.paper::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  pointer-events: none;
+  z-index: 0;
+}
+
+.paper > * {
+  position: relative;
+  z-index: 1;
+}
+
+[data-theme="dark"] .paper::before {
+  opacity: 0.06;
+}

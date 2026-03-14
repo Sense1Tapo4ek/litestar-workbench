@@ -1,0 +1,15 @@
+steps:
+  - name: "Dep from controller level (router > app)"
+    method: GET
+    path: /api/items/info
+    expect_status: 200
+
+  - name: "Dep from handler level (handler > controller)"
+    method: GET
+    path: /api/items/custom
+    expect_status: 200
+
+  - name: "Guard without Authorization header -> 401"
+    method: GET
+    path: /api/items/secured
+    expect_status: 401

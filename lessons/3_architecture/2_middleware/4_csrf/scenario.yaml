@@ -1,0 +1,13 @@
+steps:
+  - name: "List notes (GET — no CSRF)"
+    method: GET
+    path: /notes
+    expect_status: 200
+    description: "GET — безопасный метод, CSRF-токен не нужен"
+
+  - name: "Get CSRF token"
+    method: GET
+    path: /csrf-token
+    expect_status: 200
+    save_as: csrf
+    description: "Токен приходит через cookie csrftoken"

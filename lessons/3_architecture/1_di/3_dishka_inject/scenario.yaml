@@ -1,0 +1,24 @@
+steps:
+  - name: "Create task — success"
+    method: POST
+    path: /tasks
+    body:
+      title: "Learn Dishka"
+    expect_status: 201
+    description: "UoW.__aexit__ без ошибки — видим commit в логах"
+
+  - name: "Create task — service error"
+    method: POST
+    path: /tasks
+    body:
+      title: "error task"
+    expect_status: 500
+    description: "EmailNotificationService бросает ValueError — UoW делает rollback, ошибка видна в логах"
+
+  - name: "Next task — new transaction"
+    method: POST
+    path: /tasks
+    body:
+      title: "Litestar"
+    expect_status: 201
+    description: "Rollback не затронул эту транзакцию — commit проходит"

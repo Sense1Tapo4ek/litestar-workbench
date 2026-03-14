@@ -1,0 +1,41 @@
+<div class="step-result">
+  {% if result.error %}
+  <div class="step-error">{{ result.error }}</div>
+  {% else %}
+  <div class="step-result-header">
+    <span class="step-status-badge {% if result.passed %}passed{% else %}failed{% endif %}">
+      {{ result.actual_status }} {% if result.passed %}&#10003;{% else %}&#10007;{% endif %}
+    </span>
+    <span class="step-elapsed">{{ result.elapsed_ms }}ms</span>
+  </div>
+  {% if result.response_body %}
+  <pre class="step-response-body">{{ result.response_body }}</pre>
+  {% endif %}
+  {% if result.response_headers %}
+  <details class="step-headers">
+    <summary class="step-headers-toggle">Headers</summary>
+    <div class="step-headers-body">
+      {% for key, value in result.response_headers.items() %}
+      <div class="step-header-row">
+        <span class="step-header-name">{{ key }}</span>
+        <span class="step-header-value">{{ value }}</span>
+      </div>
+      {% endfor %}
+    </div>
+  </details>
+  {% endif %}
+  {% if result.response_cookies %}
+  <details class="step-headers">
+    <summary class="step-headers-toggle">Cookies</summary>
+    <div class="step-headers-body">
+      {% for key, value in result.response_cookies.items() %}
+      <div class="step-header-row">
+        <span class="step-header-name">{{ key }}</span>
+        <span class="step-header-value">{{ value }}</span>
+      </div>
+      {% endfor %}
+    </div>
+  </details>
+  {% endif %}
+  {% endif %}
+</div>
